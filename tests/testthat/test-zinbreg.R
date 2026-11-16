@@ -43,10 +43,15 @@ test_that("zinbreg zero coefficients agree with zeroinfl on bioChemists", {
 
 test_that("zinbreg log(theta) agrees with zeroinfl on bioChemists", {
   our_lth <- log(fit_ours$theta)
-  ref_lth <- ref_count["Log(theta)"]
+  ## zeroinfl stores log(theta) in coef() output — find it by pattern
+  ref_all <- coef(fit_ref)
+  lth_idx <- grep("theta|Theta", names(ref_all), ignore.case = TRUE)
+  ref_lth <- if (length(lth_idx) > 0) unname(ref_all[lth_idx[1]]) else
+               log(fit_ref$theta)
   diff    <- abs(our_lth - ref_lth)
   expect_lt(diff, 1e-3,
-            label = sprintf("log(theta) diff = %.2e", diff))
+            label = sprintf("log(theta) diff = %.2e (ours=%.4f, ref=%.4f)",
+                            diff, our_lth, ref_lth))
 })
 
 test_that("zinbreg log-likelihood agrees with zeroinfl on bioChemists", {
@@ -62,10 +67,7 @@ test_that("zinbreg log-likelihood agrees with zeroinfl on bioChemists", {
 
 ## ---- EM monotonicity: log-likelihood must never decrease ----
 test_that("zinbreg EM log-likelihood is non-decreasing", {
-  ## Fit with trace off; we capture the ll sequence via a small helper
-  lls <- numeric(0)
   ctrl <- zinbreg_control(maxit = 50, epsilon = 1e-12, trace = FALSE)
-  ## We test indirectly: fit from two starting points and check both converge
   fit1 <- zinbreg(art ~ fem + ment | fem + ment,
                   data = bioChemists, control = ctrl)
   fit2 <- zinbreg(art ~ ment | ment,
@@ -103,7 +105,9 @@ test_that("zinbreg count coefficients agree with zeroinfl on NMES1988", {
 ## ---- Basic behaviour ----
 test_that("zinbreg S3 methods work", {
   fit <- zinbreg(art ~ fem + ment | fem + ment, data = bioChemists)
-  expect_true(is.list(coef(fit)))
+  expect_true(is.numeric(coef(fit)))            # default = "full", a named vector
+  expect_true(is.numeric(coef(fit, "count")))
+  expect_true(is.numeric(coef(fit, "zero")))
   expect_s3_class(logLik(fit), "logLik")
   expect_equal(length(fitted(fit)), nrow(bioChemists))
   expect_equal(nobs(fit), nrow(bioChemists))

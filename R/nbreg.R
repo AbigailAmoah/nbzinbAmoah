@@ -118,8 +118,8 @@ nbreg <- function(formula, data, offset = NULL, control = nbreg_control(),
       W    <- sqrt(w)
       Xw   <- X * W
       zw   <- z * W
-      qrXw <- qr(Xw)
-      beta_new <- as.numeric(qr.coef(qrXw, zw))
+      qrXw <- base::qr(Xw)
+      beta_new <- as.numeric(base::qr.coef(qrXw, zw))
 
       delta_beta <- max(abs(beta_new - beta))
       beta <- beta_new

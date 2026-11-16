@@ -155,7 +155,7 @@ zinbreg <- function(formula, data, offset = NULL,
       z_z   <- eta_z + (tau - pi_c) / (pi_c * (1 - pi_c) + 1e-14)
       W_z   <- sqrt(w_z + 1e-14)
       Zw    <- Z * W_z; zw_z <- z_z * W_z
-      gamma_new <- as.numeric(qr.coef(qr(Zw), zw_z))
+      gamma_new <- as.numeric(base::qr.coef(base::qr(Zw), zw_z))
       if (any(!is.finite(gamma_new))) break
       if (max(abs(gamma_new - gamma)) < 1e-10) { gamma <- gamma_new; break }
       gamma <- gamma_new
@@ -175,7 +175,7 @@ zinbreg <- function(formula, data, offset = NULL,
       z_b   <- (eta_b - off) + (y - mu) / mu
       W_b   <- sqrt(w_b + 1e-14)
       Xw    <- X * W_b; zw_b <- z_b * W_b
-      beta_new <- tryCatch(as.numeric(qr.coef(qr(Xw), zw_b)),
+      beta_new <- tryCatch(as.numeric(base::qr.coef(base::qr(Xw), zw_b)),
                            error = function(e) beta)
       if (any(!is.finite(beta_new))) break
       if (max(abs(beta_new - beta)) < 1e-10) { beta <- beta_new; break }
@@ -368,10 +368,13 @@ print.summary.zinbreg <- function(x, digits = 4, signif.stars = TRUE, ...) {
 }
 
 #' @export
-coef.zinbreg <- function(object, model = c("count", "zero", "full"), ...) {
+coef.zinbreg <- function(object, model = c("full", "count", "zero"), ...) {
   model <- match.arg(model)
-  if (model == "full") return(c(object$coefficients$count, object$coefficients$zero))
-  object$coefficients[[model]]
+  if (model == "full") {
+    c(object$coefficients$count, object$coefficients$zero)
+  } else {
+    object$coefficients[[model]]
+  }
 }
 
 #' @export
