@@ -1,0 +1,30 @@
+Package: nbzinbAmoah
+Title: Negative Binomial and Zero-Inflated Negative Binomial Regression
+Version: 0.1.0
+Authors@R:
+    person("Abigail", "Amoah", , "amoaha@miamioh.edu", role = c("aut", "cre"))
+Description: Fits negative binomial (NB) regression via iteratively reweighted
+    least squares (IRLS) alternated with Newton-Raphson for the dispersion
+    parameter, and zero-inflated negative binomial (ZINB) regression via an
+    EM algorithm whose M-steps are IRLS. Estimation is performed entirely
+    without general-purpose optimizers.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+Imports:
+    stats,
+    Formula
+Suggests:
+    MASS,
+    pscl,
+    AER,
+    numDeriv,
+    bench,
+    testthat (>= 3.0.0),
+    knitr,
+    rmarkdown
+Config/testthat/edition: 3
+VignetteBuilder: knitr
+URL: https://github.com/amoaha/nbzinbAmoah
+BugReports: https://github.com/amoaha/nbzinbAmoah/issues
