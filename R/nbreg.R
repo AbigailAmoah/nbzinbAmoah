@@ -48,7 +48,7 @@ nbreg_control <- function(maxit = 200, theta_maxit = 50,
 #'   summary(fit)
 #' }
 #' @importFrom stats model.frame model.matrix model.response model.offset
-#'   model.weights qr qr.coef pnorm
+#'   model.weights pnorm nobs
 #' @export
 nbreg <- function(formula, data, offset = NULL, control = nbreg_control(),
                   weights = NULL) {
@@ -115,11 +115,13 @@ nbreg <- function(formula, data, offset = NULL, control = nbreg_control(),
       z <- (eta - off) + (y - mu) / mu
 
       ## Weighted least squares: beta_new = (X'WX)^{-1} X'Wz
-      W    <- sqrt(w)
-      Xw   <- X * W
-      zw   <- z * W
-      qrXw <- base::qr(Xw)
-      beta_new <- as.numeric(base::qr.coef(qrXw, zw))
+      ## Weighted least squares via Cholesky: beta = (X'WX)^{-1} X'Wz
+      XtWX <- crossprod(X, w * X)
+      XtWz <- crossprod(X, w * z)
+      beta_new <- tryCatch(
+        as.numeric(solve(XtWX, XtWz)),
+        error = function(e) as.numeric(chol2inv(chol(XtWX + diag(1e-10, ncol(X)))) %*% XtWz)
+      )
 
       delta_beta <- max(abs(beta_new - beta))
       beta <- beta_new
@@ -302,6 +304,7 @@ residuals.nbreg <- function(object, type = c("response", "pearson"), ...) {
 }
 
 #' @export
+#' @method nobs nbreg
 nobs.nbreg <- function(object, ...) object$nobs
 
 #' @export

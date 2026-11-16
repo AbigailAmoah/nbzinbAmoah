@@ -11,7 +11,6 @@ Description: Fits negative binomial (NB) regression via iteratively reweighted
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.2
 Imports:
     stats,
     Formula
@@ -25,6 +24,6 @@ Suggests:
     knitr,
     rmarkdown
 Config/testthat/edition: 3
-VignetteBuilder: knitr
 URL: https://github.com/amoaha/nbzinbAmoah
 BugReports: https://github.com/amoaha/nbzinbAmoah/issues
+Config/roxygen2/version: 8.1.1
