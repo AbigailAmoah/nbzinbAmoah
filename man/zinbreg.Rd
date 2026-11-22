@@ -54,6 +54,14 @@ The model has two components:
 Specify both parts with a two-part formula \code{y ~ x1 + x2 | z1 + z2}.
 If no \code{|} is present, the same covariates are used for both parts.
 }
+\section{Warnings}{
+
+A warning is issued if the EM algorithm reaches \code{maxit} iterations
+without converging, if the observed-data log-likelihood ever decreases,
+or if \eqn{\hat	heta} exceeds \eqn{10^4}, which means the count part
+shows essentially no overdispersion (the Poisson limit).
+}
+
 \examples{
 if (requireNamespace("pscl", quietly = TRUE)) {
   data("bioChemists", package = "pscl")

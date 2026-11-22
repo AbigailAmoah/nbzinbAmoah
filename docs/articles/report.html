@@ -1,0 +1,1424 @@
+<html lang="en"><head>
+<script>/**
+ * @popperjs/core v2.11.7 - MIT License
+ */
+
+!function(e,t){"object"==typeof exports&&"undefined"!=typeof module?t(exports):"function"==typeof define&&define.amd?define(["exports"],t):t((e="undefined"!=typeof globalThis?globalThis:e||self).Popper={})}(this,(function(e){"use strict";function t(e){if(null==e)return window;if("[object Window]"!==e.toString()){var t=e.ownerDocument;return t&&t.defaultView||window}return e}function n(e){return e instanceof t(e).Element||e instanceof Element}function r(e){return e instanceof t(e).HTMLElement||e instanceof HTMLElement}function o(e){return"undefined"!=typeof ShadowRoot&&(e instanceof t(e).ShadowRoot||e instanceof ShadowRoot)}var i=Math.max,a=Math.min,s=Math.round;function f(){var e=navigator.userAgentData;return null!=e&&e.brands&&Array.isArray(e.brands)?e.brands.map((function(e){return e.brand+"/"+e.version})).join(" "):navigator.userAgent}function c(){return!/^((?!chrome|android).)*safari/i.test(f())}function p(e,o,i){void 0===o&&(o=!1),void 0===i&&(i=!1);var a=e.getBoundingClientRect(),f=1,p=1;o&&r(e)&&(f=e.offsetWidth>0&&s(a.width)/e.offsetWidth||1,p=e.offsetHeight>0&&s(a.height)/e.offsetHeight||1);var u=(n(e)?t(e):window).visualViewport,l=!c()&&i,d=(a.left+(l&&u?u.offsetLeft:0))/f,h=(a.top+(l&&u?u.offsetTop:0))/p,m=a.width/f,v=a.height/p;return{width:m,height:v,top:h,right:d+m,bottom:h+v,left:d,x:d,y:h}}function u(e){var n=t(e);return{scrollLeft:n.pageXOffset,scrollTop:n.pageYOffset}}function l(e){return e?(e.nodeName||"").toLowerCase():null}function d(e){return((n(e)?e.ownerDocument:e.document)||window.document).documentElement}function h(e){return p(d(e)).left+u(e).scrollLeft}function m(e){return t(e).getComputedStyle(e)}function v(e){var t=m(e),n=t.overflow,r=t.overflowX,o=t.overflowY;return/auto|scroll|overlay|hidden/.test(n+o+r)}function y(e,n,o){void 0===o&&(o=!1);var i,a,f=r(n),c=r(n)&&function(e){var t=e.getBoundingClientRect(),n=s(t.width)/e.offsetWidth||1,r=s(t.height)/e.offsetHeight||1;return 1!==n||1!==r}(n),m=d(n),y=p(e,c,o),g={scrollLeft:0,scrollTop:0},b={x:0,y:0};return(f||!f&&!o)&&(("body"!==l(n)||v(m))&&(g=(i=n)!==t(i)&&r(i)?{scrollLeft:(a=i).scrollLeft,scrollTop:a.scrollTop}:u(i)),r(n)?((b=p(n,!0)).x+=n.clientLeft,b.y+=n.clientTop):m&&(b.x=h(m))),{x:y.left+g.scrollLeft-b.x,y:y.top+g.scrollTop-b.y,width:y.width,height:y.height}}function g(e){var t=p(e),n=e.offsetWidth,r=e.offsetHeight;return Math.abs(t.width-n)<=1&&(n=t.width),Math.abs(t.height-r)<=1&&(r=t.height),{x:e.offsetLeft,y:e.offsetTop,width:n,height:r}}function b(e){return"html"===l(e)?e:e.assignedSlot||e.parentNode||(o(e)?e.host:null)||d(e)}function x(e){return["html","body","#document"].indexOf(l(e))>=0?e.ownerDocument.body:r(e)&&v(e)?e:x(b(e))}function w(e,n){var r;void 0===n&&(n=[]);var o=x(e),i=o===(null==(r=e.ownerDocument)?void 0:r.body),a=t(o),s=i?[a].concat(a.visualViewport||[],v(o)?o:[]):o,f=n.concat(s);return i?f:f.concat(w(b(s)))}function O(e){return["table","td","th"].indexOf(l(e))>=0}function j(e){return r(e)&&"fixed"!==m(e).position?e.offsetParent:null}function E(e){for(var n=t(e),i=j(e);i&&O(i)&&"static"===m(i).position;)i=j(i);return i&&("html"===l(i)||"body"===l(i)&&"static"===m(i).position)?n:i||function(e){var t=/firefox/i.test(f());if(/Trident/i.test(f())&&r(e)&&"fixed"===m(e).position)return null;var n=b(e);for(o(n)&&(n=n.host);r(n)&&["html","body"].indexOf(l(n))<0;){var i=m(n);if("none"!==i.transform||"none"!==i.perspective||"paint"===i.contain||-1!==["transform","perspective"].indexOf(i.willChange)||t&&"filter"===i.willChange||t&&i.filter&&"none"!==i.filter)return n;n=n.parentNode}return null}(e)||n}var D="top",A="bottom",L="right",P="left",M="auto",k=[D,A,L,P],W="start",B="end",H="viewport",T="popper",R=k.reduce((function(e,t){return e.concat([t+"-"+W,t+"-"+B])}),[]),S=[].concat(k,[M]).reduce((function(e,t){return e.concat([t,t+"-"+W,t+"-"+B])}),[]),V=["beforeRead","read","afterRead","beforeMain","main","afterMain","beforeWrite","write","afterWrite"];function q(e){var t=new Map,n=new Set,r=[];function o(e){n.add(e.name),[].concat(e.requires||[],e.requiresIfExists||[]).forEach((function(e){if(!n.has(e)){var r=t.get(e);r&&o(r)}})),r.push(e)}return e.forEach((function(e){t.set(e.name,e)})),e.forEach((function(e){n.has(e.name)||o(e)})),r}function C(e){return e.split("-")[0]}function N(e,t){var n=t.getRootNode&&t.getRootNode();if(e.contains(t))return!0;if(n&&o(n)){var r=t;do{if(r&&e.isSameNode(r))return!0;r=r.parentNode||r.host}while(r)}return!1}function I(e){return Object.assign({},e,{left:e.x,top:e.y,right:e.x+e.width,bottom:e.y+e.height})}function _(e,r,o){return r===H?I(function(e,n){var r=t(e),o=d(e),i=r.visualViewport,a=o.clientWidth,s=o.clientHeight,f=0,p=0;if(i){a=i.width,s=i.height;var u=c();(u||!u&&"fixed"===n)&&(f=i.offsetLeft,p=i.offsetTop)}return{width:a,height:s,x:f+h(e),y:p}}(e,o)):n(r)?function(e,t){var n=p(e,!1,"fixed"===t);return n.top=n.top+e.clientTop,n.left=n.left+e.clientLeft,n.bottom=n.top+e.clientHeight,n.right=n.left+e.clientWidth,n.width=e.clientWidth,n.height=e.clientHeight,n.x=n.left,n.y=n.top,n}(r,o):I(function(e){var t,n=d(e),r=u(e),o=null==(t=e.ownerDocument)?void 0:t.body,a=i(n.scrollWidth,n.clientWidth,o?o.scrollWidth:0,o?o.clientWidth:0),s=i(n.scrollHeight,n.clientHeight,o?o.scrollHeight:0,o?o.clientHeight:0),f=-r.scrollLeft+h(e),c=-r.scrollTop;return"rtl"===m(o||n).direction&&(f+=i(n.clientWidth,o?o.clientWidth:0)-a),{width:a,height:s,x:f,y:c}}(d(e)))}function F(e,t,o,s){var f="clippingParents"===t?function(e){var t=w(b(e)),o=["absolute","fixed"].indexOf(m(e).position)>=0&&r(e)?E(e):e;return n(o)?t.filter((function(e){return n(e)&&N(e,o)&&"body"!==l(e)})):[]}(e):[].concat(t),c=[].concat(f,[o]),p=c[0],u=c.reduce((function(t,n){var r=_(e,n,s);return t.top=i(r.top,t.top),t.right=a(r.right,t.right),t.bottom=a(r.bottom,t.bottom),t.left=i(r.left,t.left),t}),_(e,p,s));return u.width=u.right-u.left,u.height=u.bottom-u.top,u.x=u.left,u.y=u.top,u}function U(e){return e.split("-")[1]}function z(e){return["top","bottom"].indexOf(e)>=0?"x":"y"}function X(e){var t,n=e.reference,r=e.element,o=e.placement,i=o?C(o):null,a=o?U(o):null,s=n.x+n.width/2-r.width/2,f=n.y+n.height/2-r.height/2;switch(i){case D:t={x:s,y:n.y-r.height};break;case A:t={x:s,y:n.y+n.height};break;case L:t={x:n.x+n.width,y:f};break;case P:t={x:n.x-r.width,y:f};break;default:t={x:n.x,y:n.y}}var c=i?z(i):null;if(null!=c){var p="y"===c?"height":"width";switch(a){case W:t[c]=t[c]-(n[p]/2-r[p]/2);break;case B:t[c]=t[c]+(n[p]/2-r[p]/2)}}return t}function Y(e){return Object.assign({},{top:0,right:0,bottom:0,left:0},e)}function G(e,t){return t.reduce((function(t,n){return t[n]=e,t}),{})}function J(e,t){void 0===t&&(t={});var r=t,o=r.placement,i=void 0===o?e.placement:o,a=r.strategy,s=void 0===a?e.strategy:a,f=r.boundary,c=void 0===f?"clippingParents":f,u=r.rootBoundary,l=void 0===u?H:u,h=r.elementContext,m=void 0===h?T:h,v=r.altBoundary,y=void 0!==v&&v,g=r.padding,b=void 0===g?0:g,x=Y("number"!=typeof b?b:G(b,k)),w=m===T?"reference":T,O=e.rects.popper,j=e.elements[y?w:m],E=F(n(j)?j:j.contextElement||d(e.elements.popper),c,l,s),P=p(e.elements.reference),M=X({reference:P,element:O,strategy:"absolute",placement:i}),W=I(Object.assign({},O,M)),B=m===T?W:P,R={top:E.top-B.top+x.top,bottom:B.bottom-E.bottom+x.bottom,left:E.left-B.left+x.left,right:B.right-E.right+x.right},S=e.modifiersData.offset;if(m===T&&S){var V=S[i];Object.keys(R).forEach((function(e){var t=[L,A].indexOf(e)>=0?1:-1,n=[D,A].indexOf(e)>=0?"y":"x";R[e]+=V[n]*t}))}return R}var K={placement:"bottom",modifiers:[],strategy:"absolute"};function Q(){for(var e=arguments.length,t=new Array(e),n=0;n<e;n++)t[n]=arguments[n];return!t.some((function(e){return!(e&&"function"==typeof e.getBoundingClientRect)}))}function Z(e){void 0===e&&(e={});var t=e,r=t.defaultModifiers,o=void 0===r?[]:r,i=t.defaultOptions,a=void 0===i?K:i;return function(e,t,r){void 0===r&&(r=a);var i,s,f={placement:"bottom",orderedModifiers:[],options:Object.assign({},K,a),modifiersData:{},elements:{reference:e,popper:t},attributes:{},styles:{}},c=[],p=!1,u={state:f,setOptions:function(r){var i="function"==typeof r?r(f.options):r;l(),f.options=Object.assign({},a,f.options,i),f.scrollParents={reference:n(e)?w(e):e.contextElement?w(e.contextElement):[],popper:w(t)};var s,p,d=function(e){var t=q(e);return V.reduce((function(e,n){return e.concat(t.filter((function(e){return e.phase===n})))}),[])}((s=[].concat(o,f.options.modifiers),p=s.reduce((function(e,t){var n=e[t.name];return e[t.name]=n?Object.assign({},n,t,{options:Object.assign({},n.options,t.options),data:Object.assign({},n.data,t.data)}):t,e}),{}),Object.keys(p).map((function(e){return p[e]}))));return f.orderedModifiers=d.filter((function(e){return e.enabled})),f.orderedModifiers.forEach((function(e){var t=e.name,n=e.options,r=void 0===n?{}:n,o=e.effect;if("function"==typeof o){var i=o({state:f,name:t,instance:u,options:r}),a=function(){};c.push(i||a)}})),u.update()},forceUpdate:function(){if(!p){var e=f.elements,t=e.reference,n=e.popper;if(Q(t,n)){f.rects={reference:y(t,E(n),"fixed"===f.options.strategy),popper:g(n)},f.reset=!1,f.placement=f.options.placement,f.orderedModifiers.forEach((function(e){return f.modifiersData[e.name]=Object.assign({},e.data)}));for(var r=0;r<f.orderedModifiers.length;r++)if(!0!==f.reset){var o=f.orderedModifiers[r],i=o.fn,a=o.options,s=void 0===a?{}:a,c=o.name;"function"==typeof i&&(f=i({state:f,options:s,name:c,instance:u})||f)}else f.reset=!1,r=-1}}},update:(i=function(){return new Promise((function(e){u.forceUpdate(),e(f)}))},function(){return s||(s=new Promise((function(e){Promise.resolve().then((function(){s=void 0,e(i())}))}))),s}),destroy:function(){l(),p=!0}};if(!Q(e,t))return u;function l(){c.forEach((function(e){return e()})),c=[]}return u.setOptions(r).then((function(e){!p&&r.onFirstUpdate&&r.onFirstUpdate(e)})),u}}var $={passive:!0};var ee={name:"eventListeners",enabled:!0,phase:"write",fn:function(){},effect:function(e){var n=e.state,r=e.instance,o=e.options,i=o.scroll,a=void 0===i||i,s=o.resize,f=void 0===s||s,c=t(n.elements.popper),p=[].concat(n.scrollParents.reference,n.scrollParents.popper);return a&&p.forEach((function(e){e.addEventListener("scroll",r.update,$)})),f&&c.addEventListener("resize",r.update,$),function(){a&&p.forEach((function(e){e.removeEventListener("scroll",r.update,$)})),f&&c.removeEventListener("resize",r.update,$)}},data:{}};var te={name:"popperOffsets",enabled:!0,phase:"read",fn:function(e){var t=e.state,n=e.name;t.modifiersData[n]=X({reference:t.rects.reference,element:t.rects.popper,strategy:"absolute",placement:t.placement})},data:{}},ne={top:"auto",right:"auto",bottom:"auto",left:"auto"};function re(e){var n,r=e.popper,o=e.popperRect,i=e.placement,a=e.variation,f=e.offsets,c=e.position,p=e.gpuAcceleration,u=e.adaptive,l=e.roundOffsets,h=e.isFixed,v=f.x,y=void 0===v?0:v,g=f.y,b=void 0===g?0:g,x="function"==typeof l?l({x:y,y:b}):{x:y,y:b};y=x.x,b=x.y;var w=f.hasOwnProperty("x"),O=f.hasOwnProperty("y"),j=P,M=D,k=window;if(u){var W=E(r),H="clientHeight",T="clientWidth";if(W===t(r)&&"static"!==m(W=d(r)).position&&"absolute"===c&&(H="scrollHeight",T="scrollWidth"),W=W,i===D||(i===P||i===L)&&a===B)M=A,b-=(h&&W===k&&k.visualViewport?k.visualViewport.height:W[H])-o.height,b*=p?1:-1;if(i===P||(i===D||i===A)&&a===B)j=L,y-=(h&&W===k&&k.visualViewport?k.visualViewport.width:W[T])-o.width,y*=p?1:-1}var R,S=Object.assign({position:c},u&&ne),V=!0===l?function(e,t){var n=e.x,r=e.y,o=t.devicePixelRatio||1;return{x:s(n*o)/o||0,y:s(r*o)/o||0}}({x:y,y:b},t(r)):{x:y,y:b};return y=V.x,b=V.y,p?Object.assign({},S,((R={})[M]=O?"0":"",R[j]=w?"0":"",R.transform=(k.devicePixelRatio||1)<=1?"translate("+y+"px, "+b+"px)":"translate3d("+y+"px, "+b+"px, 0)",R)):Object.assign({},S,((n={})[M]=O?b+"px":"",n[j]=w?y+"px":"",n.transform="",n))}var oe={name:"computeStyles",enabled:!0,phase:"beforeWrite",fn:function(e){var t=e.state,n=e.options,r=n.gpuAcceleration,o=void 0===r||r,i=n.adaptive,a=void 0===i||i,s=n.roundOffsets,f=void 0===s||s,c={placement:C(t.placement),variation:U(t.placement),popper:t.elements.popper,popperRect:t.rects.popper,gpuAcceleration:o,isFixed:"fixed"===t.options.strategy};null!=t.modifiersData.popperOffsets&&(t.styles.popper=Object.assign({},t.styles.popper,re(Object.assign({},c,{offsets:t.modifiersData.popperOffsets,position:t.options.strategy,adaptive:a,roundOffsets:f})))),null!=t.modifiersData.arrow&&(t.styles.arrow=Object.assign({},t.styles.arrow,re(Object.assign({},c,{offsets:t.modifiersData.arrow,position:"absolute",adaptive:!1,roundOffsets:f})))),t.attributes.popper=Object.assign({},t.attributes.popper,{"data-popper-placement":t.placement})},data:{}};var ie={name:"applyStyles",enabled:!0,phase:"write",fn:function(e){var t=e.state;Object.keys(t.elements).forEach((function(e){var n=t.styles[e]||{},o=t.attributes[e]||{},i=t.elements[e];r(i)&&l(i)&&(Object.assign(i.style,n),Object.keys(o).forEach((function(e){var t=o[e];!1===t?i.removeAttribute(e):i.setAttribute(e,!0===t?"":t)})))}))},effect:function(e){var t=e.state,n={popper:{position:t.options.strategy,left:"0",top:"0",margin:"0"},arrow:{position:"absolute"},reference:{}};return Object.assign(t.elements.popper.style,n.popper),t.styles=n,t.elements.arrow&&Object.assign(t.elements.arrow.style,n.arrow),function(){Object.keys(t.elements).forEach((function(e){var o=t.elements[e],i=t.attributes[e]||{},a=Object.keys(t.styles.hasOwnProperty(e)?t.styles[e]:n[e]).reduce((function(e,t){return e[t]="",e}),{});r(o)&&l(o)&&(Object.assign(o.style,a),Object.keys(i).forEach((function(e){o.removeAttribute(e)})))}))}},requires:["computeStyles"]};var ae={name:"offset",enabled:!0,phase:"main",requires:["popperOffsets"],fn:function(e){var t=e.state,n=e.options,r=e.name,o=n.offset,i=void 0===o?[0,0]:o,a=S.reduce((function(e,n){return e[n]=function(e,t,n){var r=C(e),o=[P,D].indexOf(r)>=0?-1:1,i="function"==typeof n?n(Object.assign({},t,{placement:e})):n,a=i[0],s=i[1];return a=a||0,s=(s||0)*o,[P,L].indexOf(r)>=0?{x:s,y:a}:{x:a,y:s}}(n,t.rects,i),e}),{}),s=a[t.placement],f=s.x,c=s.y;null!=t.modifiersData.popperOffsets&&(t.modifiersData.popperOffsets.x+=f,t.modifiersData.popperOffsets.y+=c),t.modifiersData[r]=a}},se={left:"right",right:"left",bottom:"top",top:"bottom"};function fe(e){return e.replace(/left|right|bottom|top/g,(function(e){return se[e]}))}var ce={start:"end",end:"start"};function pe(e){return e.replace(/start|end/g,(function(e){return ce[e]}))}function ue(e,t){void 0===t&&(t={});var n=t,r=n.placement,o=n.boundary,i=n.rootBoundary,a=n.padding,s=n.flipVariations,f=n.allowedAutoPlacements,c=void 0===f?S:f,p=U(r),u=p?s?R:R.filter((function(e){return U(e)===p})):k,l=u.filter((function(e){return c.indexOf(e)>=0}));0===l.length&&(l=u);var d=l.reduce((function(t,n){return t[n]=J(e,{placement:n,boundary:o,rootBoundary:i,padding:a})[C(n)],t}),{});return Object.keys(d).sort((function(e,t){return d[e]-d[t]}))}var le={name:"flip",enabled:!0,phase:"main",fn:function(e){var t=e.state,n=e.options,r=e.name;if(!t.modifiersData[r]._skip){for(var o=n.mainAxis,i=void 0===o||o,a=n.altAxis,s=void 0===a||a,f=n.fallbackPlacements,c=n.padding,p=n.boundary,u=n.rootBoundary,l=n.altBoundary,d=n.flipVariations,h=void 0===d||d,m=n.allowedAutoPlacements,v=t.options.placement,y=C(v),g=f||(y===v||!h?[fe(v)]:function(e){if(C(e)===M)return[];var t=fe(e);return[pe(e),t,pe(t)]}(v)),b=[v].concat(g).reduce((function(e,n){return e.concat(C(n)===M?ue(t,{placement:n,boundary:p,rootBoundary:u,padding:c,flipVariations:h,allowedAutoPlacements:m}):n)}),[]),x=t.rects.reference,w=t.rects.popper,O=new Map,j=!0,E=b[0],k=0;k<b.length;k++){var B=b[k],H=C(B),T=U(B)===W,R=[D,A].indexOf(H)>=0,S=R?"width":"height",V=J(t,{placement:B,boundary:p,rootBoundary:u,altBoundary:l,padding:c}),q=R?T?L:P:T?A:D;x[S]>w[S]&&(q=fe(q));var N=fe(q),I=[];if(i&&I.push(V[H]<=0),s&&I.push(V[q]<=0,V[N]<=0),I.every((function(e){return e}))){E=B,j=!1;break}O.set(B,I)}if(j)for(var _=function(e){var t=b.find((function(t){var n=O.get(t);if(n)return n.slice(0,e).every((function(e){return e}))}));if(t)return E=t,"break"},F=h?3:1;F>0;F--){if("break"===_(F))break}t.placement!==E&&(t.modifiersData[r]._skip=!0,t.placement=E,t.reset=!0)}},requiresIfExists:["offset"],data:{_skip:!1}};function de(e,t,n){return i(e,a(t,n))}var he={name:"preventOverflow",enabled:!0,phase:"main",fn:function(e){var t=e.state,n=e.options,r=e.name,o=n.mainAxis,s=void 0===o||o,f=n.altAxis,c=void 0!==f&&f,p=n.boundary,u=n.rootBoundary,l=n.altBoundary,d=n.padding,h=n.tether,m=void 0===h||h,v=n.tetherOffset,y=void 0===v?0:v,b=J(t,{boundary:p,rootBoundary:u,padding:d,altBoundary:l}),x=C(t.placement),w=U(t.placement),O=!w,j=z(x),M="x"===j?"y":"x",k=t.modifiersData.popperOffsets,B=t.rects.reference,H=t.rects.popper,T="function"==typeof y?y(Object.assign({},t.rects,{placement:t.placement})):y,R="number"==typeof T?{mainAxis:T,altAxis:T}:Object.assign({mainAxis:0,altAxis:0},T),S=t.modifiersData.offset?t.modifiersData.offset[t.placement]:null,V={x:0,y:0};if(k){if(s){var q,N="y"===j?D:P,I="y"===j?A:L,_="y"===j?"height":"width",F=k[j],X=F+b[N],Y=F-b[I],G=m?-H[_]/2:0,K=w===W?B[_]:H[_],Q=w===W?-H[_]:-B[_],Z=t.elements.arrow,$=m&&Z?g(Z):{width:0,height:0},ee=t.modifiersData["arrow#persistent"]?t.modifiersData["arrow#persistent"].padding:{top:0,right:0,bottom:0,left:0},te=ee[N],ne=ee[I],re=de(0,B[_],$[_]),oe=O?B[_]/2-G-re-te-R.mainAxis:K-re-te-R.mainAxis,ie=O?-B[_]/2+G+re+ne+R.mainAxis:Q+re+ne+R.mainAxis,ae=t.elements.arrow&&E(t.elements.arrow),se=ae?"y"===j?ae.clientTop||0:ae.clientLeft||0:0,fe=null!=(q=null==S?void 0:S[j])?q:0,ce=F+ie-fe,pe=de(m?a(X,F+oe-fe-se):X,F,m?i(Y,ce):Y);k[j]=pe,V[j]=pe-F}if(c){var ue,le="x"===j?D:P,he="x"===j?A:L,me=k[M],ve="y"===M?"height":"width",ye=me+b[le],ge=me-b[he],be=-1!==[D,P].indexOf(x),xe=null!=(ue=null==S?void 0:S[M])?ue:0,we=be?ye:me-B[ve]-H[ve]-xe+R.altAxis,Oe=be?me+B[ve]+H[ve]-xe-R.altAxis:ge,je=m&&be?function(e,t,n){var r=de(e,t,n);return r>n?n:r}(we,me,Oe):de(m?we:ye,me,m?Oe:ge);k[M]=je,V[M]=je-me}t.modifiersData[r]=V}},requiresIfExists:["offset"]};var me={name:"arrow",enabled:!0,phase:"main",fn:function(e){var t,n=e.state,r=e.name,o=e.options,i=n.elements.arrow,a=n.modifiersData.popperOffsets,s=C(n.placement),f=z(s),c=[P,L].indexOf(s)>=0?"height":"width";if(i&&a){var p=function(e,t){return Y("number"!=typeof(e="function"==typeof e?e(Object.assign({},t.rects,{placement:t.placement})):e)?e:G(e,k))}(o.padding,n),u=g(i),l="y"===f?D:P,d="y"===f?A:L,h=n.rects.reference[c]+n.rects.reference[f]-a[f]-n.rects.popper[c],m=a[f]-n.rects.reference[f],v=E(i),y=v?"y"===f?v.clientHeight||0:v.clientWidth||0:0,b=h/2-m/2,x=p[l],w=y-u[c]-p[d],O=y/2-u[c]/2+b,j=de(x,O,w),M=f;n.modifiersData[r]=((t={})[M]=j,t.centerOffset=j-O,t)}},effect:function(e){var t=e.state,n=e.options.element,r=void 0===n?"[data-popper-arrow]":n;null!=r&&("string"!=typeof r||(r=t.elements.popper.querySelector(r)))&&N(t.elements.popper,r)&&(t.elements.arrow=r)},requires:["popperOffsets"],requiresIfExists:["preventOverflow"]};function ve(e,t,n){return void 0===n&&(n={x:0,y:0}),{top:e.top-t.height-n.y,right:e.right-t.width+n.x,bottom:e.bottom-t.height+n.y,left:e.left-t.width-n.x}}function ye(e){return[D,L,A,P].some((function(t){return e[t]>=0}))}var ge={name:"hide",enabled:!0,phase:"main",requiresIfExists:["preventOverflow"],fn:function(e){var t=e.state,n=e.name,r=t.rects.reference,o=t.rects.popper,i=t.modifiersData.preventOverflow,a=J(t,{elementContext:"reference"}),s=J(t,{altBoundary:!0}),f=ve(a,r),c=ve(s,o,i),p=ye(f),u=ye(c);t.modifiersData[n]={referenceClippingOffsets:f,popperEscapeOffsets:c,isReferenceHidden:p,hasPopperEscaped:u},t.attributes.popper=Object.assign({},t.attributes.popper,{"data-popper-reference-hidden":p,"data-popper-escaped":u})}},be=Z({defaultModifiers:[ee,te,oe,ie]}),xe=[ee,te,oe,ie,ae,le,he,me,ge],we=Z({defaultModifiers:xe});e.applyStyles=ie,e.arrow=me,e.computeStyles=oe,e.createPopper=we,e.createPopperLite=be,e.defaultModifiers=xe,e.detectOverflow=J,e.eventListeners=ee,e.flip=le,e.hide=ge,e.offset=ae,e.popperGenerator=Z,e.popperOffsets=te,e.preventOverflow=he,Object.defineProperty(e,"__esModule",{value:!0})}));
+
+</script>
+<script>!function(e,t){"object"==typeof exports&&"undefined"!=typeof module?module.exports=t(require("@popperjs/core")):"function"==typeof define&&define.amd?define(["@popperjs/core"],t):(e=e||self).tippy=t(e.Popper)}(this,(function(e){"use strict";var t={passive:!0,capture:!0},n=function(){return document.body};function r(e,t,n){if(Array.isArray(e)){var r=e[t];return null==r?Array.isArray(n)?n[t]:n:r}return e}function o(e,t){var n={}.toString.call(e);return 0===n.indexOf("[object")&&n.indexOf(t+"]")>-1}function i(e,t){return"function"==typeof e?e.apply(void 0,t):e}function a(e,t){return 0===t?e:function(r){clearTimeout(n),n=setTimeout((function(){e(r)}),t)};var n}function s(e,t){var n=Object.assign({},e);return t.forEach((function(e){delete n[e]})),n}function u(e){return[].concat(e)}function c(e,t){-1===e.indexOf(t)&&e.push(t)}function p(e){return e.split("-")[0]}function f(e){return[].slice.call(e)}function l(e){return Object.keys(e).reduce((function(t,n){return void 0!==e[n]&&(t[n]=e[n]),t}),{})}function d(){return document.createElement("div")}function v(e){return["Element","Fragment"].some((function(t){return o(e,t)}))}function m(e){return o(e,"MouseEvent")}function g(e){return!(!e||!e._tippy||e._tippy.reference!==e)}function h(e){return v(e)?[e]:function(e){return o(e,"NodeList")}(e)?f(e):Array.isArray(e)?e:f(document.querySelectorAll(e))}function b(e,t){e.forEach((function(e){e&&(e.style.transitionDuration=t+"ms")}))}function y(e,t){e.forEach((function(e){e&&e.setAttribute("data-state",t)}))}function w(e){var t,n=u(e)[0];return null!=n&&null!=(t=n.ownerDocument)&&t.body?n.ownerDocument:document}function E(e,t,n){var r=t+"EventListener";["transitionend","webkitTransitionEnd"].forEach((function(t){e[r](t,n)}))}function O(e,t){for(var n=t;n;){var r;if(e.contains(n))return!0;n=null==n.getRootNode||null==(r=n.getRootNode())?void 0:r.host}return!1}var x={isTouch:!1},C=0;function T(){x.isTouch||(x.isTouch=!0,window.performance&&document.addEventListener("mousemove",A))}function A(){var e=performance.now();e-C<20&&(x.isTouch=!1,document.removeEventListener("mousemove",A)),C=e}function L(){var e=document.activeElement;if(g(e)){var t=e._tippy;e.blur&&!t.state.isVisible&&e.blur()}}var D=!!("undefined"!=typeof window&&"undefined"!=typeof document)&&!!window.msCrypto,R=Object.assign({appendTo:n,aria:{content:"auto",expanded:"auto"},delay:0,duration:[300,250],getReferenceClientRect:null,hideOnClick:!0,ignoreAttributes:!1,interactive:!1,interactiveBorder:2,interactiveDebounce:0,moveTransition:"",offset:[0,10],onAfterUpdate:function(){},onBeforeUpdate:function(){},onCreate:function(){},onDestroy:function(){},onHidden:function(){},onHide:function(){},onMount:function(){},onShow:function(){},onShown:function(){},onTrigger:function(){},onUntrigger:function(){},onClickOutside:function(){},placement:"top",plugins:[],popperOptions:{},render:null,showOnCreate:!1,touch:!0,trigger:"mouseenter focus",triggerTarget:null},{animateFill:!1,followCursor:!1,inlinePositioning:!1,sticky:!1},{allowHTML:!1,animation:"fade",arrow:!0,content:"",inertia:!1,maxWidth:350,role:"tooltip",theme:"",zIndex:9999}),k=Object.keys(R);function P(e){var t=(e.plugins||[]).reduce((function(t,n){var r,o=n.name,i=n.defaultValue;o&&(t[o]=void 0!==e[o]?e[o]:null!=(r=R[o])?r:i);return t}),{});return Object.assign({},e,t)}function j(e,t){var n=Object.assign({},t,{content:i(t.content,[e])},t.ignoreAttributes?{}:function(e,t){return(t?Object.keys(P(Object.assign({},R,{plugins:t}))):k).reduce((function(t,n){var r=(e.getAttribute("data-tippy-"+n)||"").trim();if(!r)return t;if("content"===n)t[n]=r;else try{t[n]=JSON.parse(r)}catch(e){t[n]=r}return t}),{})}(e,t.plugins));return n.aria=Object.assign({},R.aria,n.aria),n.aria={expanded:"auto"===n.aria.expanded?t.interactive:n.aria.expanded,content:"auto"===n.aria.content?t.interactive?null:"describedby":n.aria.content},n}function M(e,t){e.innerHTML=t}function V(e){var t=d();return!0===e?t.className="tippy-arrow":(t.className="tippy-svg-arrow",v(e)?t.appendChild(e):M(t,e)),t}function I(e,t){v(t.content)?(M(e,""),e.appendChild(t.content)):"function"!=typeof t.content&&(t.allowHTML?M(e,t.content):e.textContent=t.content)}function S(e){var t=e.firstElementChild,n=f(t.children);return{box:t,content:n.find((function(e){return e.classList.contains("tippy-content")})),arrow:n.find((function(e){return e.classList.contains("tippy-arrow")||e.classList.contains("tippy-svg-arrow")})),backdrop:n.find((function(e){return e.classList.contains("tippy-backdrop")}))}}function N(e){var t=d(),n=d();n.className="tippy-box",n.setAttribute("data-state","hidden"),n.setAttribute("tabindex","-1");var r=d();function o(n,r){var o=S(t),i=o.box,a=o.content,s=o.arrow;r.theme?i.setAttribute("data-theme",r.theme):i.removeAttribute("data-theme"),"string"==typeof r.animation?i.setAttribute("data-animation",r.animation):i.removeAttribute("data-animation"),r.inertia?i.setAttribute("data-inertia",""):i.removeAttribute("data-inertia"),i.style.maxWidth="number"==typeof r.maxWidth?r.maxWidth+"px":r.maxWidth,r.role?i.setAttribute("role",r.role):i.removeAttribute("role"),n.content===r.content&&n.allowHTML===r.allowHTML||I(a,e.props),r.arrow?s?n.arrow!==r.arrow&&(i.removeChild(s),i.appendChild(V(r.arrow))):i.appendChild(V(r.arrow)):s&&i.removeChild(s)}return r.className="tippy-content",r.setAttribute("data-state","hidden"),I(r,e.props),t.appendChild(n),n.appendChild(r),o(e.props,e.props),{popper:t,onUpdate:o}}N.$$tippy=!0;var B=1,H=[],U=[];function _(o,s){var v,g,h,C,T,A,L,k,M=j(o,Object.assign({},R,P(l(s)))),V=!1,I=!1,N=!1,_=!1,F=[],W=a(we,M.interactiveDebounce),X=B++,Y=(k=M.plugins).filter((function(e,t){return k.indexOf(e)===t})),$={id:X,reference:o,popper:d(),popperInstance:null,props:M,state:{isEnabled:!0,isVisible:!1,isDestroyed:!1,isMounted:!1,isShown:!1},plugins:Y,clearDelayTimeouts:function(){clearTimeout(v),clearTimeout(g),cancelAnimationFrame(h)},setProps:function(e){if($.state.isDestroyed)return;ae("onBeforeUpdate",[$,e]),be();var t=$.props,n=j(o,Object.assign({},t,l(e),{ignoreAttributes:!0}));$.props=n,he(),t.interactiveDebounce!==n.interactiveDebounce&&(ce(),W=a(we,n.interactiveDebounce));t.triggerTarget&&!n.triggerTarget?u(t.triggerTarget).forEach((function(e){e.removeAttribute("aria-expanded")})):n.triggerTarget&&o.removeAttribute("aria-expanded");ue(),ie(),J&&J(t,n);$.popperInstance&&(Ce(),Ae().forEach((function(e){requestAnimationFrame(e._tippy.popperInstance.forceUpdate)})));ae("onAfterUpdate",[$,e])},setContent:function(e){$.setProps({content:e})},show:function(){var e=$.state.isVisible,t=$.state.isDestroyed,o=!$.state.isEnabled,a=x.isTouch&&!$.props.touch,s=r($.props.duration,0,R.duration);if(e||t||o||a)return;if(te().hasAttribute("disabled"))return;if(ae("onShow",[$],!1),!1===$.props.onShow($))return;$.state.isVisible=!0,ee()&&(z.style.visibility="visible");ie(),de(),$.state.isMounted||(z.style.transition="none");if(ee()){var u=re(),p=u.box,f=u.content;b([p,f],0)}A=function(){var e;if($.state.isVisible&&!_){if(_=!0,z.offsetHeight,z.style.transition=$.props.moveTransition,ee()&&$.props.animation){var t=re(),n=t.box,r=t.content;b([n,r],s),y([n,r],"visible")}se(),ue(),c(U,$),null==(e=$.popperInstance)||e.forceUpdate(),ae("onMount",[$]),$.props.animation&&ee()&&function(e,t){me(e,t)}(s,(function(){$.state.isShown=!0,ae("onShown",[$])}))}},function(){var e,t=$.props.appendTo,r=te();e=$.props.interactive&&t===n||"parent"===t?r.parentNode:i(t,[r]);e.contains(z)||e.appendChild(z);$.state.isMounted=!0,Ce()}()},hide:function(){var e=!$.state.isVisible,t=$.state.isDestroyed,n=!$.state.isEnabled,o=r($.props.duration,1,R.duration);if(e||t||n)return;if(ae("onHide",[$],!1),!1===$.props.onHide($))return;$.state.isVisible=!1,$.state.isShown=!1,_=!1,V=!1,ee()&&(z.style.visibility="hidden");if(ce(),ve(),ie(!0),ee()){var i=re(),a=i.box,s=i.content;$.props.animation&&(b([a,s],o),y([a,s],"hidden"))}se(),ue(),$.props.animation?ee()&&function(e,t){me(e,(function(){!$.state.isVisible&&z.parentNode&&z.parentNode.contains(z)&&t()}))}(o,$.unmount):$.unmount()},hideWithInteractivity:function(e){ne().addEventListener("mousemove",W),c(H,W),W(e)},enable:function(){$.state.isEnabled=!0},disable:function(){$.hide(),$.state.isEnabled=!1},unmount:function(){$.state.isVisible&&$.hide();if(!$.state.isMounted)return;Te(),Ae().forEach((function(e){e._tippy.unmount()})),z.parentNode&&z.parentNode.removeChild(z);U=U.filter((function(e){return e!==$})),$.state.isMounted=!1,ae("onHidden",[$])},destroy:function(){if($.state.isDestroyed)return;$.clearDelayTimeouts(),$.unmount(),be(),delete o._tippy,$.state.isDestroyed=!0,ae("onDestroy",[$])}};if(!M.render)return $;var q=M.render($),z=q.popper,J=q.onUpdate;z.setAttribute("data-tippy-root",""),z.id="tippy-"+$.id,$.popper=z,o._tippy=$,z._tippy=$;var G=Y.map((function(e){return e.fn($)})),K=o.hasAttribute("aria-expanded");return he(),ue(),ie(),ae("onCreate",[$]),M.showOnCreate&&Le(),z.addEventListener("mouseenter",(function(){$.props.interactive&&$.state.isVisible&&$.clearDelayTimeouts()})),z.addEventListener("mouseleave",(function(){$.props.interactive&&$.props.trigger.indexOf("mouseenter")>=0&&ne().addEventListener("mousemove",W)})),$;function Q(){var e=$.props.touch;return Array.isArray(e)?e:[e,0]}function Z(){return"hold"===Q()[0]}function ee(){var e;return!(null==(e=$.props.render)||!e.$$tippy)}function te(){return L||o}function ne(){var e=te().parentNode;return e?w(e):document}function re(){return S(z)}function oe(e){return $.state.isMounted&&!$.state.isVisible||x.isTouch||C&&"focus"===C.type?0:r($.props.delay,e?0:1,R.delay)}function ie(e){void 0===e&&(e=!1),z.style.pointerEvents=$.props.interactive&&!e?"":"none",z.style.zIndex=""+$.props.zIndex}function ae(e,t,n){var r;(void 0===n&&(n=!0),G.forEach((function(n){n[e]&&n[e].apply(n,t)})),n)&&(r=$.props)[e].apply(r,t)}function se(){var e=$.props.aria;if(e.content){var t="aria-"+e.content,n=z.id;u($.props.triggerTarget||o).forEach((function(e){var r=e.getAttribute(t);if($.state.isVisible)e.setAttribute(t,r?r+" "+n:n);else{var o=r&&r.replace(n,"").trim();o?e.setAttribute(t,o):e.removeAttribute(t)}}))}}function ue(){!K&&$.props.aria.expanded&&u($.props.triggerTarget||o).forEach((function(e){$.props.interactive?e.setAttribute("aria-expanded",$.state.isVisible&&e===te()?"true":"false"):e.removeAttribute("aria-expanded")}))}function ce(){ne().removeEventListener("mousemove",W),H=H.filter((function(e){return e!==W}))}function pe(e){if(!x.isTouch||!N&&"mousedown"!==e.type){var t=e.composedPath&&e.composedPath()[0]||e.target;if(!$.props.interactive||!O(z,t)){if(u($.props.triggerTarget||o).some((function(e){return O(e,t)}))){if(x.isTouch)return;if($.state.isVisible&&$.props.trigger.indexOf("click")>=0)return}else ae("onClickOutside",[$,e]);!0===$.props.hideOnClick&&($.clearDelayTimeouts(),$.hide(),I=!0,setTimeout((function(){I=!1})),$.state.isMounted||ve())}}}function fe(){N=!0}function le(){N=!1}function de(){var e=ne();e.addEventListener("mousedown",pe,!0),e.addEventListener("touchend",pe,t),e.addEventListener("touchstart",le,t),e.addEventListener("touchmove",fe,t)}function ve(){var e=ne();e.removeEventListener("mousedown",pe,!0),e.removeEventListener("touchend",pe,t),e.removeEventListener("touchstart",le,t),e.removeEventListener("touchmove",fe,t)}function me(e,t){var n=re().box;function r(e){e.target===n&&(E(n,"remove",r),t())}if(0===e)return t();E(n,"remove",T),E(n,"add",r),T=r}function ge(e,t,n){void 0===n&&(n=!1),u($.props.triggerTarget||o).forEach((function(r){r.addEventListener(e,t,n),F.push({node:r,eventType:e,handler:t,options:n})}))}function he(){var e;Z()&&(ge("touchstart",ye,{passive:!0}),ge("touchend",Ee,{passive:!0})),(e=$.props.trigger,e.split(/\s+/).filter(Boolean)).forEach((function(e){if("manual"!==e)switch(ge(e,ye),e){case"mouseenter":ge("mouseleave",Ee);break;case"focus":ge(D?"focusout":"blur",Oe);break;case"focusin":ge("focusout",Oe)}}))}function be(){F.forEach((function(e){var t=e.node,n=e.eventType,r=e.handler,o=e.options;t.removeEventListener(n,r,o)})),F=[]}function ye(e){var t,n=!1;if($.state.isEnabled&&!xe(e)&&!I){var r="focus"===(null==(t=C)?void 0:t.type);C=e,L=e.currentTarget,ue(),!$.state.isVisible&&m(e)&&H.forEach((function(t){return t(e)})),"click"===e.type&&($.props.trigger.indexOf("mouseenter")<0||V)&&!1!==$.props.hideOnClick&&$.state.isVisible?n=!0:Le(e),"click"===e.type&&(V=!n),n&&!r&&De(e)}}function we(e){var t=e.target,n=te().contains(t)||z.contains(t);"mousemove"===e.type&&n||function(e,t){var n=t.clientX,r=t.clientY;return e.every((function(e){var t=e.popperRect,o=e.popperState,i=e.props.interactiveBorder,a=p(o.placement),s=o.modifiersData.offset;if(!s)return!0;var u="bottom"===a?s.top.y:0,c="top"===a?s.bottom.y:0,f="right"===a?s.left.x:0,l="left"===a?s.right.x:0,d=t.top-r+u>i,v=r-t.bottom-c>i,m=t.left-n+f>i,g=n-t.right-l>i;return d||v||m||g}))}(Ae().concat(z).map((function(e){var t,n=null==(t=e._tippy.popperInstance)?void 0:t.state;return n?{popperRect:e.getBoundingClientRect(),popperState:n,props:M}:null})).filter(Boolean),e)&&(ce(),De(e))}function Ee(e){xe(e)||$.props.trigger.indexOf("click")>=0&&V||($.props.interactive?$.hideWithInteractivity(e):De(e))}function Oe(e){$.props.trigger.indexOf("focusin")<0&&e.target!==te()||$.props.interactive&&e.relatedTarget&&z.contains(e.relatedTarget)||De(e)}function xe(e){return!!x.isTouch&&Z()!==e.type.indexOf("touch")>=0}function Ce(){Te();var t=$.props,n=t.popperOptions,r=t.placement,i=t.offset,a=t.getReferenceClientRect,s=t.moveTransition,u=ee()?S(z).arrow:null,c=a?{getBoundingClientRect:a,contextElement:a.contextElement||te()}:o,p=[{name:"offset",options:{offset:i}},{name:"preventOverflow",options:{padding:{top:2,bottom:2,left:5,right:5}}},{name:"flip",options:{padding:5}},{name:"computeStyles",options:{adaptive:!s}},{name:"$$tippy",enabled:!0,phase:"beforeWrite",requires:["computeStyles"],fn:function(e){var t=e.state;if(ee()){var n=re().box;["placement","reference-hidden","escaped"].forEach((function(e){"placement"===e?n.setAttribute("data-placement",t.placement):t.attributes.popper["data-popper-"+e]?n.setAttribute("data-"+e,""):n.removeAttribute("data-"+e)})),t.attributes.popper={}}}}];ee()&&u&&p.push({name:"arrow",options:{element:u,padding:3}}),p.push.apply(p,(null==n?void 0:n.modifiers)||[]),$.popperInstance=e.createPopper(c,z,Object.assign({},n,{placement:r,onFirstUpdate:A,modifiers:p}))}function Te(){$.popperInstance&&($.popperInstance.destroy(),$.popperInstance=null)}function Ae(){return f(z.querySelectorAll("[data-tippy-root]"))}function Le(e){$.clearDelayTimeouts(),e&&ae("onTrigger",[$,e]),de();var t=oe(!0),n=Q(),r=n[0],o=n[1];x.isTouch&&"hold"===r&&o&&(t=o),t?v=setTimeout((function(){$.show()}),t):$.show()}function De(e){if($.clearDelayTimeouts(),ae("onUntrigger",[$,e]),$.state.isVisible){if(!($.props.trigger.indexOf("mouseenter")>=0&&$.props.trigger.indexOf("click")>=0&&["mouseleave","mousemove"].indexOf(e.type)>=0&&V)){var t=oe(!1);t?g=setTimeout((function(){$.state.isVisible&&$.hide()}),t):h=requestAnimationFrame((function(){$.hide()}))}}else ve()}}function F(e,n){void 0===n&&(n={});var r=R.plugins.concat(n.plugins||[]);document.addEventListener("touchstart",T,t),window.addEventListener("blur",L);var o=Object.assign({},n,{plugins:r}),i=h(e).reduce((function(e,t){var n=t&&_(t,o);return n&&e.push(n),e}),[]);return v(e)?i[0]:i}F.defaultProps=R,F.setDefaultProps=function(e){Object.keys(e).forEach((function(t){R[t]=e[t]}))},F.currentInput=x;var W=Object.assign({},e.applyStyles,{effect:function(e){var t=e.state,n={popper:{position:t.options.strategy,left:"0",top:"0",margin:"0"},arrow:{position:"absolute"},reference:{}};Object.assign(t.elements.popper.style,n.popper),t.styles=n,t.elements.arrow&&Object.assign(t.elements.arrow.style,n.arrow)}}),X={mouseover:"mouseenter",focusin:"focus",click:"click"};var Y={name:"animateFill",defaultValue:!1,fn:function(e){var t;if(null==(t=e.props.render)||!t.$$tippy)return{};var n=S(e.popper),r=n.box,o=n.content,i=e.props.animateFill?function(){var e=d();return e.className="tippy-backdrop",y([e],"hidden"),e}():null;return{onCreate:function(){i&&(r.insertBefore(i,r.firstElementChild),r.setAttribute("data-animatefill",""),r.style.overflow="hidden",e.setProps({arrow:!1,animation:"shift-away"}))},onMount:function(){if(i){var e=r.style.transitionDuration,t=Number(e.replace("ms",""));o.style.transitionDelay=Math.round(t/10)+"ms",i.style.transitionDuration=e,y([i],"visible")}},onShow:function(){i&&(i.style.transitionDuration="0ms")},onHide:function(){i&&y([i],"hidden")}}}};var $={clientX:0,clientY:0},q=[];function z(e){var t=e.clientX,n=e.clientY;$={clientX:t,clientY:n}}var J={name:"followCursor",defaultValue:!1,fn:function(e){var t=e.reference,n=w(e.props.triggerTarget||t),r=!1,o=!1,i=!0,a=e.props;function s(){return"initial"===e.props.followCursor&&e.state.isVisible}function u(){n.addEventListener("mousemove",f)}function c(){n.removeEventListener("mousemove",f)}function p(){r=!0,e.setProps({getReferenceClientRect:null}),r=!1}function f(n){var r=!n.target||t.contains(n.target),o=e.props.followCursor,i=n.clientX,a=n.clientY,s=t.getBoundingClientRect(),u=i-s.left,c=a-s.top;!r&&e.props.interactive||e.setProps({getReferenceClientRect:function(){var e=t.getBoundingClientRect(),n=i,r=a;"initial"===o&&(n=e.left+u,r=e.top+c);var s="horizontal"===o?e.top:r,p="vertical"===o?e.right:n,f="horizontal"===o?e.bottom:r,l="vertical"===o?e.left:n;return{width:p-l,height:f-s,top:s,right:p,bottom:f,left:l}}})}function l(){e.props.followCursor&&(q.push({instance:e,doc:n}),function(e){e.addEventListener("mousemove",z)}(n))}function d(){0===(q=q.filter((function(t){return t.instance!==e}))).filter((function(e){return e.doc===n})).length&&function(e){e.removeEventListener("mousemove",z)}(n)}return{onCreate:l,onDestroy:d,onBeforeUpdate:function(){a=e.props},onAfterUpdate:function(t,n){var i=n.followCursor;r||void 0!==i&&a.followCursor!==i&&(d(),i?(l(),!e.state.isMounted||o||s()||u()):(c(),p()))},onMount:function(){e.props.followCursor&&!o&&(i&&(f($),i=!1),s()||u())},onTrigger:function(e,t){m(t)&&($={clientX:t.clientX,clientY:t.clientY}),o="focus"===t.type},onHidden:function(){e.props.followCursor&&(p(),c(),i=!0)}}}};var G={name:"inlinePositioning",defaultValue:!1,fn:function(e){var t,n=e.reference;var r=-1,o=!1,i=[],a={name:"tippyInlinePositioning",enabled:!0,phase:"afterWrite",fn:function(o){var a=o.state;e.props.inlinePositioning&&(-1!==i.indexOf(a.placement)&&(i=[]),t!==a.placement&&-1===i.indexOf(a.placement)&&(i.push(a.placement),e.setProps({getReferenceClientRect:function(){return function(e){return function(e,t,n,r){if(n.length<2||null===e)return t;if(2===n.length&&r>=0&&n[0].left>n[1].right)return n[r]||t;switch(e){case"top":case"bottom":var o=n[0],i=n[n.length-1],a="top"===e,s=o.top,u=i.bottom,c=a?o.left:i.left,p=a?o.right:i.right;return{top:s,bottom:u,left:c,right:p,width:p-c,height:u-s};case"left":case"right":var f=Math.min.apply(Math,n.map((function(e){return e.left}))),l=Math.max.apply(Math,n.map((function(e){return e.right}))),d=n.filter((function(t){return"left"===e?t.left===f:t.right===l})),v=d[0].top,m=d[d.length-1].bottom;return{top:v,bottom:m,left:f,right:l,width:l-f,height:m-v};default:return t}}(p(e),n.getBoundingClientRect(),f(n.getClientRects()),r)}(a.placement)}})),t=a.placement)}};function s(){var t;o||(t=function(e,t){var n;return{popperOptions:Object.assign({},e.popperOptions,{modifiers:[].concat(((null==(n=e.popperOptions)?void 0:n.modifiers)||[]).filter((function(e){return e.name!==t.name})),[t])})}}(e.props,a),o=!0,e.setProps(t),o=!1)}return{onCreate:s,onAfterUpdate:s,onTrigger:function(t,n){if(m(n)){var o=f(e.reference.getClientRects()),i=o.find((function(e){return e.left-2<=n.clientX&&e.right+2>=n.clientX&&e.top-2<=n.clientY&&e.bottom+2>=n.clientY})),a=o.indexOf(i);r=a>-1?a:r}},onHidden:function(){r=-1}}}};var K={name:"sticky",defaultValue:!1,fn:function(e){var t=e.reference,n=e.popper;function r(t){return!0===e.props.sticky||e.props.sticky===t}var o=null,i=null;function a(){var s=r("reference")?(e.popperInstance?e.popperInstance.state.elements.reference:t).getBoundingClientRect():null,u=r("popper")?n.getBoundingClientRect():null;(s&&Q(o,s)||u&&Q(i,u))&&e.popperInstance&&e.popperInstance.update(),o=s,i=u,e.state.isMounted&&requestAnimationFrame(a)}return{onMount:function(){e.props.sticky&&a()}}}};function Q(e,t){return!e||!t||(e.top!==t.top||e.right!==t.right||e.bottom!==t.bottom||e.left!==t.left)}return F.setDefaultProps({plugins:[Y,J,G,K],render:N}),F.createSingleton=function(e,t){var n;void 0===t&&(t={});var r,o=e,i=[],a=[],c=t.overrides,p=[],f=!1;function l(){a=o.map((function(e){return u(e.props.triggerTarget||e.reference)})).reduce((function(e,t){return e.concat(t)}),[])}function v(){i=o.map((function(e){return e.reference}))}function m(e){o.forEach((function(t){e?t.enable():t.disable()}))}function g(e){return o.map((function(t){var n=t.setProps;return t.setProps=function(o){n(o),t.reference===r&&e.setProps(o)},function(){t.setProps=n}}))}function h(e,t){var n=a.indexOf(t);if(t!==r){r=t;var s=(c||[]).concat("content").reduce((function(e,t){return e[t]=o[n].props[t],e}),{});e.setProps(Object.assign({},s,{getReferenceClientRect:"function"==typeof s.getReferenceClientRect?s.getReferenceClientRect:function(){var e;return null==(e=i[n])?void 0:e.getBoundingClientRect()}}))}}m(!1),v(),l();var b={fn:function(){return{onDestroy:function(){m(!0)},onHidden:function(){r=null},onClickOutside:function(e){e.props.showOnCreate&&!f&&(f=!0,r=null)},onShow:function(e){e.props.showOnCreate&&!f&&(f=!0,h(e,i[0]))},onTrigger:function(e,t){h(e,t.currentTarget)}}}},y=F(d(),Object.assign({},s(t,["overrides"]),{plugins:[b].concat(t.plugins||[]),triggerTarget:a,popperOptions:Object.assign({},t.popperOptions,{modifiers:[].concat((null==(n=t.popperOptions)?void 0:n.modifiers)||[],[W])})})),w=y.show;y.show=function(e){if(w(),!r&&null==e)return h(y,i[0]);if(!r||null!=e){if("number"==typeof e)return i[e]&&h(y,i[e]);if(o.indexOf(e)>=0){var t=e.reference;return h(y,t)}return i.indexOf(e)>=0?h(y,e):void 0}},y.showNext=function(){var e=i[0];if(!r)return y.show(0);var t=i.indexOf(r);y.show(i[t+1]||e)},y.showPrevious=function(){var e=i[i.length-1];if(!r)return y.show(e);var t=i.indexOf(r),n=i[t-1]||e;y.show(n)};var E=y.setProps;return y.setProps=function(e){c=e.overrides||c,E(e)},y.setInstances=function(e){m(!0),p.forEach((function(e){return e()})),o=e,m(!1),v(),l(),p=g(y),y.setProps({triggerTarget:a})},p=g(y),y},F.delegate=function(e,n){var r=[],o=[],i=!1,a=n.target,c=s(n,["target"]),p=Object.assign({},c,{trigger:"manual",touch:!1}),f=Object.assign({touch:R.touch},c,{showOnCreate:!0}),l=F(e,p);function d(e){if(e.target&&!i){var t=e.target.closest(a);if(t){var r=t.getAttribute("data-tippy-trigger")||n.trigger||R.trigger;if(!t._tippy&&!("touchstart"===e.type&&"boolean"==typeof f.touch||"touchstart"!==e.type&&r.indexOf(X[e.type])<0)){var s=F(t,f);s&&(o=o.concat(s))}}}}function v(e,t,n,o){void 0===o&&(o=!1),e.addEventListener(t,n,o),r.push({node:e,eventType:t,handler:n,options:o})}return u(l).forEach((function(e){var n=e.destroy,a=e.enable,s=e.disable;e.destroy=function(e){void 0===e&&(e=!0),e&&o.forEach((function(e){e.destroy()})),o=[],r.forEach((function(e){var t=e.node,n=e.eventType,r=e.handler,o=e.options;t.removeEventListener(n,r,o)})),r=[],n()},e.enable=function(){a(),o.forEach((function(e){return e.enable()})),i=!1},e.disable=function(){s(),o.forEach((function(e){return e.disable()})),i=!0},function(e){var n=e.reference;v(n,"touchstart",d,t),v(n,"mouseover",d),v(n,"focusin",d),v(n,"click",d)}(e)})),l},F.hideAll=function(e){var t=void 0===e?{}:e,n=t.exclude,r=t.duration;U.forEach((function(e){var t=!1;if(n&&(t=g(n)?e.reference===n:e.popper===n.popper),!t){var o=e.props.duration;e.setProps({duration:r}),e.hide(),e.state.isDestroyed||e.setProps({duration:o})}}))},F.roundArrow='<svg width="16" height="6" xmlns="http://www.w3.org/2000/svg"><path d="M0 6s1.796-.013 4.67-3.615C5.851.9 6.93.006 8 0c1.07-.006 2.148.887 3.343 2.385C14.233 6.005 16 6 16 6H0z"></svg>',F}));
+
+</script>
+<style type="text/css">.tippy-box[data-animation=fade][data-state=hidden]{opacity:0}[data-tippy-root]{max-width:calc(100vw - 10px)}.tippy-box{position:relative;background-color:#333;color:#fff;border-radius:4px;font-size:14px;line-height:1.4;white-space:normal;outline:0;transition-property:transform,visibility,opacity}.tippy-box[data-placement^=top]>.tippy-arrow{bottom:0}.tippy-box[data-placement^=top]>.tippy-arrow:before{bottom:-7px;left:0;border-width:8px 8px 0;border-top-color:initial;transform-origin:center top}.tippy-box[data-placement^=bottom]>.tippy-arrow{top:0}.tippy-box[data-placement^=bottom]>.tippy-arrow:before{top:-7px;left:0;border-width:0 8px 8px;border-bottom-color:initial;transform-origin:center bottom}.tippy-box[data-placement^=left]>.tippy-arrow{right:0}.tippy-box[data-placement^=left]>.tippy-arrow:before{border-width:8px 0 8px 8px;border-left-color:initial;right:-7px;transform-origin:center left}.tippy-box[data-placement^=right]>.tippy-arrow{left:0}.tippy-box[data-placement^=right]>.tippy-arrow:before{left:-7px;border-width:8px 8px 8px 0;border-right-color:initial;transform-origin:center right}.tippy-box[data-inertia][data-state=visible]{transition-timing-function:cubic-bezier(.54,1.5,.38,1.11)}.tippy-arrow{width:16px;height:16px;color:#333}.tippy-arrow:before{content:"";position:absolute;border-color:transparent;border-style:solid}.tippy-content{position:relative;padding:5px 9px;z-index:1}</style>
+<style type="text/css">.tippy-box[data-theme~=light-border]{background-color:#fff;background-clip:padding-box;border:1px solid rgba(0,8,16,.15);color:#333;box-shadow:0 4px 14px -2px rgba(0,8,16,.08)}.tippy-box[data-theme~=light-border]>.tippy-backdrop{background-color:#fff}.tippy-box[data-theme~=light-border]>.tippy-arrow:after,.tippy-box[data-theme~=light-border]>.tippy-svg-arrow:after{content:"";position:absolute;z-index:-1}.tippy-box[data-theme~=light-border]>.tippy-arrow:after{border-color:transparent;border-style:solid}.tippy-box[data-theme~=light-border][data-placement^=top]>.tippy-arrow:before{border-top-color:#fff}.tippy-box[data-theme~=light-border][data-placement^=top]>.tippy-arrow:after{border-top-color:rgba(0,8,16,.2);border-width:7px 7px 0;top:17px;left:1px}.tippy-box[data-theme~=light-border][data-placement^=top]>.tippy-svg-arrow>svg{top:16px}.tippy-box[data-theme~=light-border][data-placement^=top]>.tippy-svg-arrow:after{top:17px}.tippy-box[data-theme~=light-border][data-placement^=bottom]>.tippy-arrow:before{border-bottom-color:#fff;bottom:16px}.tippy-box[data-theme~=light-border][data-placement^=bottom]>.tippy-arrow:after{border-bottom-color:rgba(0,8,16,.2);border-width:0 7px 7px;bottom:17px;left:1px}.tippy-box[data-theme~=light-border][data-placement^=bottom]>.tippy-svg-arrow>svg{bottom:16px}.tippy-box[data-theme~=light-border][data-placement^=bottom]>.tippy-svg-arrow:after{bottom:17px}.tippy-box[data-theme~=light-border][data-placement^=left]>.tippy-arrow:before{border-left-color:#fff}.tippy-box[data-theme~=light-border][data-placement^=left]>.tippy-arrow:after{border-left-color:rgba(0,8,16,.2);border-width:7px 0 7px 7px;left:17px;top:1px}.tippy-box[data-theme~=light-border][data-placement^=left]>.tippy-svg-arrow>svg{left:11px}.tippy-box[data-theme~=light-border][data-placement^=left]>.tippy-svg-arrow:after{left:12px}.tippy-box[data-theme~=light-border][data-placement^=right]>.tippy-arrow:before{border-right-color:#fff;right:16px}.tippy-box[data-theme~=light-border][data-placement^=right]>.tippy-arrow:after{border-width:7px 7px 7px 0;right:17px;top:1px;border-right-color:rgba(0,8,16,.2)}.tippy-box[data-theme~=light-border][data-placement^=right]>.tippy-svg-arrow>svg{right:11px}.tippy-box[data-theme~=light-border][data-placement^=right]>.tippy-svg-arrow:after{right:12px}.tippy-box[data-theme~=light-border]>.tippy-svg-arrow{fill:#fff}.tippy-box[data-theme~=light-border]>.tippy-svg-arrow:after{background-image:url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iNiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMCA2czEuNzk2LS4wMTMgNC42Ny0zLjYxNUM1Ljg1MS45IDYuOTMuMDA2IDggMGMxLjA3LS4wMDYgMi4xNDguODg3IDMuMzQzIDIuMzg1QzE0LjIzMyA2LjAwNSAxNiA2IDE2IDZIMHoiIGZpbGw9InJnYmEoMCwgOCwgMTYsIDAuMikiLz48L3N2Zz4=);background-size:16px 6px;width:16px;height:6px}</style><title>NB and ZINB Regression: Building and Benchmarking an R Package</title>
+  <!-- Needed for testing but not used in final output -->
+  <style>
+
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+width: 0.8em;
+margin: 0 0.8em 0.2em -1em;  vertical-align: middle;
+}
+
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+}
+pre.numberSource { margin-left: 3em; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+
+div.csl-bib-body { }
+div.csl-entry {
+clear: both;
+}
+.hanging-indent div.csl-entry {
+margin-left:2em;
+text-indent:-2em;
+}
+div.csl-left-margin {
+min-width:2em;
+float:left;
+}
+div.csl-right-inline {
+margin-left:2em;
+padding-left:1em;
+}
+div.csl-indent {
+margin-left: 2em;
+} </style>
+</head>
+<body>
+
+<div class="includes-before">
+</div>
+
+<div class="meta">
+  <h1>NB and ZINB Regression: Building and Benchmarking an R Package</h1>
+
+
+  <p class="author">Abigail Amoah</p>
+
+  <p class="date">2026-11-15</p>
+
+
+</div>
+
+<main>
+<div style="page-break-after: always;"></div>
+<section id="introduction" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Introduction</h1>
+<p>Count data arise frequently in applied statistics: the number of physician office visits, the number of articles published, or the number of insurance claims. The simplest model for count data is the Poisson regression, which assumes that the mean equals the variance. In practice, two violations are common:</p>
+<p><strong>Overdispersion.</strong> The variance often exceeds the mean. The negative binomial (NB) model addresses this by introducing a dispersion parameter <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>θ</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\theta &gt; 0</annotation></semantics></math> so that <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">Var</mtext><mo stretchy="false" form="prefix">(</mo><msub><mi>Y</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo><mo>=</mo><msub><mi>μ</mi><mi>i</mi></msub><mo>+</mo><msubsup><mi>μ</mi><mi>i</mi><mn>2</mn></msubsup><mi>/</mi><mi>θ</mi></mrow><annotation encoding="application/x-tex">\text{Var}(Y_i) = \mu_i + \mu_i^2/\theta</annotation></semantics></math>. As <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>θ</mi><mo>→</mo><mi>∞</mi></mrow><annotation encoding="application/x-tex">\theta \to \infty</annotation></semantics></math> the model reduces to the Poisson.</p>
+<p><strong>Excess zeros.</strong> Many count datasets contain more zeros than a Poisson (or even NB) distribution predicts. The zero-inflated negative binomial (ZINB) model <span class="citation" data-cites="lambert1992">(<a href="#ref-lambert1992" role="doc-biblioref">Lambert 1992</a>)</span> handles this through a two-component mixture: with probability <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>π</mi><mi>i</mi></msub><annotation encoding="application/x-tex">\pi_i</annotation></semantics></math> the observation is a structural zero (e.g., a person who never visits a doctor); with probability <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>−</mo><msub><mi>π</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">1-\pi_i</annotation></semantics></math> it comes from an NB distribution, which can itself produce zeros.</p>
+<p>This report documents the <strong>nbzinbAmoah</strong> R package, which fits both models from scratch using iteratively reweighted least squares (IRLS) <span class="citation" data-cites="mccullagh1989">(<a href="#ref-mccullagh1989" role="doc-biblioref">McCullagh and Nelder 1989</a>)</span> and an expectation-maximisation (EM) algorithm — without any general-purpose optimizer. We benchmark our implementation against the reference functions <code>MASS::glm.nb()</code> <span class="citation" data-cites="venables2002">(<a href="#ref-venables2002" role="doc-biblioref">Venables and Ripley 2002</a>)</span> and <code>pscl::zeroinfl()</code> <span class="citation" data-cites="zeileis2008">(<a href="#ref-zeileis2008" role="doc-biblioref">Zeileis et al. 2008</a>)</span>, and apply the package to the NMES1988 dataset from the <strong>AER</strong> package <span class="citation" data-cites="kleiber2008">(<a href="#ref-kleiber2008" role="doc-biblioref">Kleiber and Zeileis 2008</a>)</span>.</p>
+</section>
+<section id="methods" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Methods</h1>
+<section id="negative-binomial-regression" class="level2" data-number="2.1">
+<h2 data-number="2.1"><span class="header-section-number">2.1</span> Negative Binomial Regression</h2>
+<p>Let <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>Y</mi><mi>i</mi></msub><annotation encoding="application/x-tex">Y_i</annotation></semantics></math> be a count and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>x</mi><mi>i</mi></msub><annotation encoding="application/x-tex">x_i</annotation></semantics></math> a <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>-vector of covariates, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi><mo>=</mo><mn>1</mn><mo>,</mo><mi>…</mi><mo>,</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">i = 1, \ldots, n</annotation></semantics></math>. The NB2 model assumes <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>Y</mi><mi>i</mi></msub><mo>=</mo><mi>y</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mfrac><mrow><mi mathvariant="normal">Γ</mi><mo stretchy="false" form="prefix">(</mo><mi>y</mi><mo>+</mo><mi>θ</mi><mo stretchy="false" form="postfix">)</mo></mrow><mrow><mi mathvariant="normal">Γ</mi><mo stretchy="false" form="prefix">(</mo><mi>θ</mi><mo stretchy="false" form="postfix">)</mo><mspace width="0.167em"></mspace><mi>y</mi><mi>!</mi></mrow></mfrac><msup><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mi>θ</mi><mrow><mi>θ</mi><mo>+</mo><msub><mi>μ</mi><mi>i</mi></msub></mrow></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mi>θ</mi></msup><msup><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><msub><mi>μ</mi><mi>i</mi></msub><mrow><mi>θ</mi><mo>+</mo><msub><mi>μ</mi><mi>i</mi></msub></mrow></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mi>y</mi></msup><mo>,</mo><mspace width="1.0em"></mspace><mi>y</mi><mo>=</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo>,</mo><mi>…</mi></mrow><annotation encoding="application/x-tex">
+P(Y_i = y) = \frac{\Gamma(y+\theta)}{\Gamma(\theta)\,y!}
+  \left(\frac{\theta}{\theta+\mu_i}\right)^\theta
+  \left(\frac{\mu_i}{\theta+\mu_i}\right)^y, \quad y = 0,1,2,\ldots
+</annotation></semantics></math> with log link <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><msub><mi>μ</mi><mi>i</mi></msub><mo>=</mo><msub><mi>η</mi><mi>i</mi></msub><mo>=</mo><msubsup><mi>x</mi><mi>i</mi><mi>⊤</mi></msubsup><mi>β</mi><mo>+</mo><msub><mi>o</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">\log\mu_i = \eta_i = x_i^\top\beta + o_i</annotation></semantics></math>, where <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>o</mi><mi>i</mi></msub><annotation encoding="application/x-tex">o_i</annotation></semantics></math> is an optional offset. Then <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>E</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>Y</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo><mo>=</mo><msub><mi>μ</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">E(Y_i) = \mu_i</annotation></semantics></math> and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">Var</mtext><mo stretchy="false" form="prefix">(</mo><msub><mi>Y</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo><mo>=</mo><msub><mi>μ</mi><mi>i</mi></msub><mo>+</mo><msubsup><mi>μ</mi><mi>i</mi><mn>2</mn></msubsup><mi>/</mi><mi>θ</mi></mrow><annotation encoding="application/x-tex">\text{Var}(Y_i) = \mu_i + \mu_i^2/\theta</annotation></semantics></math>. With prior weights <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>a</mi><mi>i</mi></msub><annotation encoding="application/x-tex">a_i</annotation></semantics></math> (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>a</mi><mi>i</mi></msub><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">a_i = 1</annotation></semantics></math> for an ordinary fit) the log-likelihood is <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ℓ</mi><mo stretchy="false" form="prefix">(</mo><mi>β</mi><mo>,</mo><mi>θ</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover><msub><mi>a</mi><mi>i</mi></msub><mo minsize="180%" maxsize="180%" stretchy="true" form="prefix">[</mo><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mi mathvariant="normal">Γ</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>+</mo><mi>θ</mi><mo stretchy="false" form="postfix">)</mo><mo>−</mo><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mi mathvariant="normal">Γ</mi><mo stretchy="false" form="prefix">(</mo><mi>θ</mi><mo stretchy="false" form="postfix">)</mo><mo>−</mo><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><msub><mi>y</mi><mi>i</mi></msub><mi>!</mi><mo>+</mo><mi>θ</mi><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mi>θ</mi><mo>+</mo><msub><mi>y</mi><mi>i</mi></msub><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><msub><mi>μ</mi><mi>i</mi></msub><mo>−</mo><mo stretchy="false" form="prefix">(</mo><mi>θ</mi><mo>+</mo><msub><mi>y</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>θ</mi><mo>+</mo><msub><mi>μ</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo><mo minsize="180%" maxsize="180%" stretchy="true" form="postfix">]</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\ell(\beta,\theta) = \sum_{i=1}^n a_i\Bigl[\log\Gamma(y_i+\theta) - \log\Gamma(\theta)
+  - \log y_i! + \theta\log\theta + y_i\log\mu_i - (\theta+y_i)\log(\theta+\mu_i)\Bigr].
+</annotation></semantics></math> This is the parameterisation used by <code>MASS::glm.nb()</code>, whose <code>theta</code> is the same <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>θ</mi><annotation encoding="application/x-tex">\theta</annotation></semantics></math>.</p>
+<p><strong>IRLS for <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>β</mi><annotation encoding="application/x-tex">\beta</annotation></semantics></math> (with <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>θ</mi><annotation encoding="application/x-tex">\theta</annotation></semantics></math> fixed).</strong> For a GLM with log link and variance <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi><mo stretchy="false" form="prefix">(</mo><mi>μ</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>μ</mi><mo>+</mo><msup><mi>μ</mi><mn>2</mn></msup><mi>/</mi><mi>θ</mi></mrow><annotation encoding="application/x-tex">V(\mu) = \mu + \mu^2/\theta</annotation></semantics></math>, Fisher scoring is equivalent to repeated weighted least squares with working weights and working response <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>w</mi><mi>i</mi></msub><mo>=</mo><msub><mi>a</mi><mi>i</mi></msub><mspace width="0.167em"></mspace><mfrac><mrow><mo stretchy="false" form="prefix">(</mo><mi>∂</mi><msub><mi>μ</mi><mi>i</mi></msub><mi>/</mi><mi>∂</mi><msub><mi>η</mi><mi>i</mi></msub><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup></mrow><mrow><mi>V</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>μ</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow></mfrac><mo>=</mo><msub><mi>a</mi><mi>i</mi></msub><mspace width="0.167em"></mspace><mfrac><mrow><mi>θ</mi><mspace width="0.167em"></mspace><msub><mi>μ</mi><mi>i</mi></msub></mrow><mrow><mi>θ</mi><mo>+</mo><msub><mi>μ</mi><mi>i</mi></msub></mrow></mfrac><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>z</mi><mi>i</mi></msub><mo>=</mo><mo stretchy="false" form="prefix">(</mo><msub><mi>η</mi><mi>i</mi></msub><mo>−</mo><msub><mi>o</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo><mo>+</mo><mfrac><mrow><msub><mi>y</mi><mi>i</mi></msub><mo>−</mo><msub><mi>μ</mi><mi>i</mi></msub></mrow><msub><mi>μ</mi><mi>i</mi></msub></mfrac><mo>,</mo></mrow><annotation encoding="application/x-tex">
+w_i = a_i\,\frac{(\partial\mu_i/\partial\eta_i)^2}{V(\mu_i)}
+    = a_i\,\frac{\theta\,\mu_i}{\theta + \mu_i}, \qquad
+z_i = (\eta_i - o_i) + \frac{y_i - \mu_i}{\mu_i},
+</annotation></semantics></math> <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>β</mi><mrow><mo stretchy="false" form="prefix">(</mo><mi>t</mi><mo>+</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow></msup><mo>=</mo><mo stretchy="false" form="prefix">(</mo><msup><mi>X</mi><mi>⊤</mi></msup><mi>W</mi><mi>X</mi><msup><mo stretchy="false" form="postfix">)</mo><mrow><mi>−</mi><mn>1</mn></mrow></msup><msup><mi>X</mi><mi>⊤</mi></msup><mi>W</mi><mi>z</mi><mo>,</mo><mspace width="2.0em"></mspace><mi>W</mi><mo>=</mo><mtext mathvariant="normal">diag</mtext><mo stretchy="false" form="prefix">(</mo><msub><mi>w</mi><mn>1</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>w</mi><mi>n</mi></msub><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\beta^{(t+1)} = (X^\top W X)^{-1} X^\top W z, \qquad W = \text{diag}(w_1,\ldots,w_n).
+</annotation></semantics></math> The weighted least-squares step is computed with <code>solve()</code>; <code>lm()</code>, <code>lm.wfit()</code> and <code>glm.fit()</code> are not used.</p>
+<p><strong>Newton–Raphson for <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>θ</mi><annotation encoding="application/x-tex">\theta</annotation></semantics></math> (with <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>β</mi><annotation encoding="application/x-tex">\beta</annotation></semantics></math> fixed).</strong> The score and second derivative of <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ℓ</mi><annotation encoding="application/x-tex">\ell</annotation></semantics></math> with respect to <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>θ</mi><annotation encoding="application/x-tex">\theta</annotation></semantics></math> are <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>U</mi><mo stretchy="false" form="prefix">(</mo><mi>θ</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><munder><mo>∑</mo><mi>i</mi></munder><msub><mi>a</mi><mi>i</mi></msub><mo minsize="180%" maxsize="180%" stretchy="true" form="prefix">[</mo><mi>ψ</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>+</mo><mi>θ</mi><mo stretchy="false" form="postfix">)</mo><mo>−</mo><mi>ψ</mi><mo stretchy="false" form="prefix">(</mo><mi>θ</mi><mo stretchy="false" form="postfix">)</mo><mo>+</mo><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mi>θ</mi><mo>+</mo><mn>1</mn><mo>−</mo><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>θ</mi><mo>+</mo><msub><mi>μ</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo><mo>−</mo><mfrac><mrow><msub><mi>y</mi><mi>i</mi></msub><mo>+</mo><mi>θ</mi></mrow><mrow><mi>θ</mi><mo>+</mo><msub><mi>μ</mi><mi>i</mi></msub></mrow></mfrac><mo minsize="180%" maxsize="180%" stretchy="true" form="postfix">]</mo><mo>,</mo></mrow><annotation encoding="application/x-tex">
+U(\theta) = \sum_i a_i\Bigl[\psi(y_i+\theta) - \psi(\theta) + \log\theta + 1
+  - \log(\theta+\mu_i) - \frac{y_i+\theta}{\theta+\mu_i}\Bigr],
+</annotation></semantics></math> <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mo stretchy="false" form="prefix">(</mo><mi>θ</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><munder><mo>∑</mo><mi>i</mi></munder><msub><mi>a</mi><mi>i</mi></msub><mo minsize="180%" maxsize="180%" stretchy="true" form="prefix">[</mo><msup><mi>ψ</mi><mo>′</mo></msup><mo stretchy="false" form="prefix">(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>+</mo><mi>θ</mi><mo stretchy="false" form="postfix">)</mo><mo>−</mo><msup><mi>ψ</mi><mo>′</mo></msup><mo stretchy="false" form="prefix">(</mo><mi>θ</mi><mo stretchy="false" form="postfix">)</mo><mo>+</mo><mfrac><mn>1</mn><mi>θ</mi></mfrac><mo>−</mo><mfrac><mn>2</mn><mrow><mi>θ</mi><mo>+</mo><msub><mi>μ</mi><mi>i</mi></msub></mrow></mfrac><mo>+</mo><mfrac><mrow><msub><mi>y</mi><mi>i</mi></msub><mo>+</mo><mi>θ</mi></mrow><mrow><mo stretchy="false" form="prefix">(</mo><mi>θ</mi><mo>+</mo><msub><mi>μ</mi><mi>i</mi></msub><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup></mrow></mfrac><mo minsize="180%" maxsize="180%" stretchy="true" form="postfix">]</mo><mo>,</mo></mrow><annotation encoding="application/x-tex">
+H(\theta) = \sum_i a_i\Bigl[\psi&#39;(y_i+\theta) - \psi&#39;(\theta) + \frac{1}{\theta}
+  - \frac{2}{\theta+\mu_i} + \frac{y_i+\theta}{(\theta+\mu_i)^2}\Bigr],
+</annotation></semantics></math> where <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ψ</mi><annotation encoding="application/x-tex">\psi</annotation></semantics></math> and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>ψ</mi><mo>′</mo></msup><annotation encoding="application/x-tex">\psi&#39;</annotation></semantics></math> are <code>digamma()</code> and <code>trigamma()</code>. We update <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ϕ</mi><mo>=</mo><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mi>θ</mi></mrow><annotation encoding="application/x-tex">\phi = \log\theta</annotation></semantics></math>, which keeps <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>θ</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\theta &gt; 0</annotation></semantics></math>. By the chain rule <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>U</mi><mi>ϕ</mi></msub><mo>=</mo><mi>θ</mi><mi>U</mi></mrow><annotation encoding="application/x-tex">U_\phi = \theta U</annotation></semantics></math> and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>H</mi><mi>ϕ</mi></msub><mo>=</mo><msup><mi>θ</mi><mn>2</mn></msup><mi>H</mi><mo>+</mo><mi>θ</mi><mi>U</mi></mrow><annotation encoding="application/x-tex">H_\phi = \theta^2 H + \theta U</annotation></semantics></math>, and the update is <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ϕ</mi><mo>←</mo><mi>ϕ</mi><mo>−</mo><msub><mi>U</mi><mi>ϕ</mi></msub><mi>/</mi><msub><mi>H</mi><mi>ϕ</mi></msub></mrow><annotation encoding="application/x-tex">\phi \leftarrow \phi - U_\phi / H_\phi</annotation></semantics></math>.</p>
+<p><strong>Standard errors.</strong> At convergence, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mtext mathvariant="normal">Var</mtext><mo accent="true">̂</mo></mover><mo stretchy="false" form="prefix">(</mo><mover><mi>β</mi><mo accent="true">̂</mo></mover><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mo stretchy="false" form="prefix">(</mo><msup><mi>X</mi><mi>⊤</mi></msup><mover><mi>W</mi><mo accent="true">̂</mo></mover><mi>X</mi><msup><mo stretchy="false" form="postfix">)</mo><mrow><mi>−</mi><mn>1</mn></mrow></msup></mrow><annotation encoding="application/x-tex">\widehat{\text{Var}}(\hat\beta) = (X^\top\hat W X)^{-1}</annotation></semantics></math>, treating <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi>θ</mi><mo accent="true">̂</mo></mover><annotation encoding="application/x-tex">\hat\theta</annotation></semantics></math> as known as <code>glm.nb()</code> does, and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">SE</mtext><mo stretchy="false" form="prefix">(</mo><mover><mi>θ</mi><mo accent="true">̂</mo></mover><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mo stretchy="false" form="prefix">{</mo><mi>−</mi><mi>H</mi><mo stretchy="false" form="prefix">(</mo><mover><mi>θ</mi><mo accent="true">̂</mo></mover><mo stretchy="false" form="postfix">)</mo><msup><mo stretchy="false" form="postfix">}</mo><mrow><mi>−</mi><mn>1</mn><mi>/</mi><mn>2</mn></mrow></msup></mrow><annotation encoding="application/x-tex">\text{SE}(\hat\theta) = \{-H(\hat\theta)\}^{-1/2}</annotation></semantics></math>. The package stores <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">SE</mtext><mo stretchy="false" form="prefix">(</mo><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mover><mi>θ</mi><mo accent="true">̂</mo></mover><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mi>−</mi><msub><mi>H</mi><mi>ϕ</mi></msub><msup><mo stretchy="false" form="postfix">)</mo><mrow><mi>−</mi><mn>1</mn><mi>/</mi><mn>2</mn></mrow></msup></mrow><annotation encoding="application/x-tex">\text{SE}(\log\hat\theta) = (-H_\phi)^{-1/2}</annotation></semantics></math>. Because <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>U</mi><mo stretchy="false" form="prefix">(</mo><mover><mi>θ</mi><mo accent="true">̂</mo></mover><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">U(\hat\theta) = 0</annotation></semantics></math> at the MLE, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>H</mi><mi>ϕ</mi></msub><mo>=</mo><msup><mover><mi>θ</mi><mo accent="true">̂</mo></mover><mn>2</mn></msup><mi>H</mi></mrow><annotation encoding="application/x-tex">H_\phi = \hat\theta^2 H</annotation></semantics></math>, so <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">SE</mtext><mo stretchy="false" form="prefix">(</mo><mover><mi>θ</mi><mo accent="true">̂</mo></mover><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mover><mi>θ</mi><mo accent="true">̂</mo></mover><mspace width="0.167em"></mspace><mtext mathvariant="normal">SE</mtext><mo stretchy="false" form="prefix">(</mo><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mover><mi>θ</mi><mo accent="true">̂</mo></mover><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\text{SE}(\hat\theta) = \hat\theta\,\text{SE}(\log\hat\theta)</annotation></semantics></math>.</p>
+</section>
+<section id="zero-inflated-negative-binomial-regression" class="level2" data-number="2.2">
+<h2 data-number="2.2"><span class="header-section-number">2.2</span> Zero-Inflated Negative Binomial Regression</h2>
+<p>The ZINB model is a two-component mixture. Let <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>D</mi><mi>i</mi></msub><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">D_i = 1</annotation></semantics></math> if observation <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math> is a structural zero, with <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>D</mi><mi>i</mi></msub><mo>=</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><msub><mi>π</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">P(D_i = 1) = \pi_i</annotation></semantics></math>; otherwise <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>Y</mi><mi>i</mi></msub><annotation encoding="application/x-tex">Y_i</annotation></semantics></math> comes from an <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">NB</mtext><mo stretchy="false" form="prefix">(</mo><msub><mi>μ</mi><mi>i</mi></msub><mo>,</mo><mi>θ</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\text{NB}(\mu_i, \theta)</annotation></semantics></math> distribution, which can itself produce zeros: <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>Y</mi><mi>i</mi></msub><mo>=</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><msub><mi>π</mi><mi>i</mi></msub><mo>+</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><msub><mi>π</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo><mspace width="0.167em"></mspace><msub><mi>f</mi><mtext mathvariant="normal">NB</mtext></msub><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo>;</mo><msub><mi>μ</mi><mi>i</mi></msub><mo>,</mo><mi>θ</mi><mo stretchy="false" form="postfix">)</mo><mo>,</mo><mspace width="2.0em"></mspace><mi>P</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>Y</mi><mi>i</mi></msub><mo>=</mo><mi>y</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><msub><mi>π</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo><mspace width="0.167em"></mspace><msub><mi>f</mi><mtext mathvariant="normal">NB</mtext></msub><mo stretchy="false" form="prefix">(</mo><mi>y</mi><mo>;</mo><msub><mi>μ</mi><mi>i</mi></msub><mo>,</mo><mi>θ</mi><mo stretchy="false" form="postfix">)</mo><mo>,</mo><mspace width="1.0em"></mspace><mi>y</mi><mo>≥</mo><mn>1</mn><mo>,</mo></mrow><annotation encoding="application/x-tex">
+P(Y_i = 0) = \pi_i + (1-\pi_i)\,f_\text{NB}(0;\mu_i,\theta), \qquad
+P(Y_i = y) = (1-\pi_i)\,f_\text{NB}(y;\mu_i,\theta), \quad y \ge 1,
+</annotation></semantics></math> where <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>f</mi><mtext mathvariant="normal">NB</mtext></msub><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo>;</mo><mi>μ</mi><mo>,</mo><mi>θ</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mo stretchy="false" form="prefix">{</mo><mi>θ</mi><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mi>θ</mi><mo>+</mo><mi>μ</mi><mo stretchy="false" form="postfix">)</mo><msup><mo stretchy="false" form="postfix">}</mo><mi>θ</mi></msup></mrow><annotation encoding="application/x-tex">f_\text{NB}(0;\mu,\theta) = \{\theta/(\theta+\mu)\}^\theta</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><msub><mi>μ</mi><mi>i</mi></msub><mo>=</mo><msubsup><mi>x</mi><mi>i</mi><mi>⊤</mi></msubsup><mi>β</mi><mo>+</mo><msub><mi>o</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">\log\mu_i = x_i^\top\beta + o_i</annotation></semantics></math> (count model) and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">logit</mtext><mspace width="0.167em"></mspace><msub><mi>π</mi><mi>i</mi></msub><mo>=</mo><msubsup><mi>z</mi><mi>i</mi><mi>⊤</mi></msubsup><mi>γ</mi></mrow><annotation encoding="application/x-tex">\text{logit}\,\pi_i = z_i^\top\gamma</annotation></semantics></math> (zero-inflation model). The covariates <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>z</mi><mi>i</mi></msub><annotation encoding="application/x-tex">z_i</annotation></semantics></math> may differ from <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>x</mi><mi>i</mi></msub><annotation encoding="application/x-tex">x_i</annotation></semantics></math>, and the marginal mean is <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>E</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>Y</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><msub><mi>π</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo><msub><mi>μ</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">E(Y_i) = (1-\pi_i)\mu_i</annotation></semantics></math>. The observed-data log-likelihood is <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ℓ</mi><mo stretchy="false" form="prefix">(</mo><mi>β</mi><mo>,</mo><mi>γ</mi><mo>,</mo><mi>θ</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><munder><mo>∑</mo><mrow><mi>i</mi><mo>:</mo><mspace width="0.167em"></mspace><msub><mi>y</mi><mi>i</mi></msub><mo>=</mo><mn>0</mn></mrow></munder><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mo minsize="120%" maxsize="120%" stretchy="true" form="prefix">[</mo><msub><mi>π</mi><mi>i</mi></msub><mo>+</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><msub><mi>π</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo><mspace width="0.167em"></mspace><msub><mi>f</mi><mtext mathvariant="normal">NB</mtext></msub><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo>;</mo><msub><mi>μ</mi><mi>i</mi></msub><mo>,</mo><mi>θ</mi><mo stretchy="false" form="postfix">)</mo><mo minsize="120%" maxsize="120%" stretchy="true" form="postfix">]</mo><mo>+</mo><munder><mo>∑</mo><mrow><mi>i</mi><mo>:</mo><mspace width="0.167em"></mspace><msub><mi>y</mi><mi>i</mi></msub><mo>&gt;</mo><mn>0</mn></mrow></munder><mo minsize="120%" maxsize="120%" stretchy="true" form="prefix">[</mo><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><msub><mi>π</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo><mo>+</mo><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><msub><mi>f</mi><mtext mathvariant="normal">NB</mtext></msub><mo stretchy="false" form="prefix">(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>;</mo><msub><mi>μ</mi><mi>i</mi></msub><mo>,</mo><mi>θ</mi><mo stretchy="false" form="postfix">)</mo><mo minsize="120%" maxsize="120%" stretchy="true" form="postfix">]</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\ell(\beta,\gamma,\theta) = \sum_{i:\,y_i=0}\log\bigl[\pi_i + (1-\pi_i)\,f_\text{NB}(0;\mu_i,\theta)\bigr]
+  + \sum_{i:\,y_i&gt;0}\bigl[\log(1-\pi_i) + \log f_\text{NB}(y_i;\mu_i,\theta)\bigr].
+</annotation></semantics></math> Because of the mixture, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ℓ</mi><annotation encoding="application/x-tex">\ell</annotation></semantics></math> is <strong>not</strong> the log-likelihood of an exponential-family GLM, so IRLS cannot be applied to it directly (<code>pscl::zeroinfl()</code> maximises it with the general-purpose optimiser BFGS). Instead we use an <strong>EM algorithm</strong> <span class="citation" data-cites="dempster1977">(<a href="#ref-dempster1977" role="doc-biblioref">Dempster et al. 1977</a>)</span> that treats <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>D</mi><mi>i</mi></msub><annotation encoding="application/x-tex">D_i</annotation></semantics></math> as missing data. Given <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>D</mi><mi>i</mi></msub><annotation encoding="application/x-tex">D_i</annotation></semantics></math>, the complete-data log-likelihood splits into a logistic part in <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>γ</mi><annotation encoding="application/x-tex">\gamma</annotation></semantics></math> and a weighted NB part in <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mi>β</mi><mo>,</mo><mi>θ</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(\beta, \theta)</annotation></semantics></math>, and each part can be fitted by IRLS.</p>
+<p><strong>E-step.</strong> Given the current <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mi>β</mi><mo>,</mo><mi>γ</mi><mo>,</mo><mi>θ</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(\beta, \gamma, \theta)</annotation></semantics></math>, compute the posterior probability that observation <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math> is a structural zero: <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>τ</mi><mi>i</mi></msub><mo>=</mo><mi>P</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>D</mi><mi>i</mi></msub><mo>=</mo><mn>1</mn><mo>∣</mo><msub><mi>y</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mrow><mo stretchy="true" form="prefix">{</mo><mtable><mtr><mtd columnalign="left" style="text-align: left"><mstyle displaystyle="true"><mfrac><msub><mi>π</mi><mi>i</mi></msub><mrow><msub><mi>π</mi><mi>i</mi></msub><mo>+</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><msub><mi>π</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo><mspace width="0.167em"></mspace><msub><mi>f</mi><mtext mathvariant="normal">NB</mtext></msub><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo>;</mo><msub><mi>μ</mi><mi>i</mi></msub><mo>,</mo><mi>θ</mi><mo stretchy="false" form="postfix">)</mo></mrow></mfrac></mstyle></mtd><mtd columnalign="left" style="text-align: left"><msub><mi>y</mi><mi>i</mi></msub><mo>=</mo><mn>0</mn><mo>,</mo></mtd></mtr><mtr><mtd columnalign="left" style="text-align: left"><mn>0</mn></mtd><mtd columnalign="left" style="text-align: left"><msub><mi>y</mi><mi>i</mi></msub><mo>&gt;</mo><mn>0</mn><mi>.</mi></mtd></mtr></mtable></mrow></mrow><annotation encoding="application/x-tex">
+\tau_i = P(D_i = 1 \mid y_i) = \begin{cases}
+  \dfrac{\pi_i}{\pi_i + (1-\pi_i)\,f_\text{NB}(0;\mu_i,\theta)} &amp; y_i = 0,\\
+  0 &amp; y_i &gt; 0.
+\end{cases}
+</annotation></semantics></math></p>
+<p><strong>M-step (zero part).</strong> Maximise <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mo>∑</mo><mi>i</mi></msub><mo stretchy="false" form="prefix">[</mo><msub><mi>τ</mi><mi>i</mi></msub><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><msub><mi>π</mi><mi>i</mi></msub><mo>+</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><msub><mi>τ</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><msub><mi>π</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">\sum_i[\tau_i\log\pi_i + (1-\tau_i)\log(1-\pi_i)]</annotation></semantics></math> over <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>γ</mi><annotation encoding="application/x-tex">\gamma</annotation></semantics></math>. This is a logistic regression with a <em>fractional</em> response <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>τ</mi><mi>i</mi></msub><annotation encoding="application/x-tex">\tau_i</annotation></semantics></math>, fitted by IRLS with <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>w</mi><mi>i</mi></msub><mo>=</mo><msub><mi>π</mi><mi>i</mi></msub><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><msub><mi>π</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo><mo>,</mo><mspace width="2.0em"></mspace><msub><mover><mi>z</mi><mo accent="true">̃</mo></mover><mi>i</mi></msub><mo>=</mo><msubsup><mi>z</mi><mi>i</mi><mi>⊤</mi></msubsup><mi>γ</mi><mo>+</mo><mfrac><mrow><msub><mi>τ</mi><mi>i</mi></msub><mo>−</mo><msub><mi>π</mi><mi>i</mi></msub></mrow><mrow><msub><mi>π</mi><mi>i</mi></msub><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><msub><mi>π</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow></mfrac><mo>,</mo><mspace width="2.0em"></mspace><mi>γ</mi><mo>←</mo><mo stretchy="false" form="prefix">(</mo><msup><mi>Z</mi><mi>⊤</mi></msup><mi>W</mi><mi>Z</mi><msup><mo stretchy="false" form="postfix">)</mo><mrow><mi>−</mi><mn>1</mn></mrow></msup><msup><mi>Z</mi><mi>⊤</mi></msup><mi>W</mi><mover><mi>z</mi><mo accent="true">̃</mo></mover><mi>.</mi></mrow><annotation encoding="application/x-tex">
+w_i = \pi_i(1-\pi_i), \qquad
+\tilde z_i = z_i^\top\gamma + \frac{\tau_i - \pi_i}{\pi_i(1-\pi_i)}, \qquad
+\gamma \leftarrow (Z^\top W Z)^{-1} Z^\top W \tilde z.
+</annotation></semantics></math> (We write <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mover><mi>z</mi><mo accent="true">̃</mo></mover><mi>i</mi></msub><annotation encoding="application/x-tex">\tilde z_i</annotation></semantics></math> for the working response, to distinguish it from the covariate vector <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>z</mi><mi>i</mi></msub><annotation encoding="application/x-tex">z_i</annotation></semantics></math>.)</p>
+<p><strong>M-step (count part).</strong> Maximise <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mo>∑</mo><mi>i</mi></msub><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><msub><mi>τ</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><msub><mi>f</mi><mtext mathvariant="normal">NB</mtext></msub><mo stretchy="false" form="prefix">(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>;</mo><msub><mi>μ</mi><mi>i</mi></msub><mo>,</mo><mi>θ</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\sum_i(1-\tau_i)\log f_\text{NB}(y_i;\mu_i,\theta)</annotation></semantics></math> over <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mi>β</mi><mo>,</mo><mi>θ</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(\beta,\theta)</annotation></semantics></math>. This is exactly the NB fit of Section 2.1 with prior weights <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>a</mi><mi>i</mi></msub><mo>=</mo><mn>1</mn><mo>−</mo><msub><mi>τ</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">a_i = 1-\tau_i</annotation></semantics></math>, so the same IRLS and Newton–Raphson updates are reused.</p>
+<p><strong>Convergence.</strong> The E- and M-steps are repeated until the observed-data log-likelihood <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ℓ</mi><mo stretchy="false" form="prefix">(</mo><mi>β</mi><mo>,</mo><mi>γ</mi><mo>,</mo><mi>θ</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\ell(\beta,\gamma,\theta)</annotation></semantics></math> changes by less than the tolerance. EM never decreases <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ℓ</mi><annotation encoding="application/x-tex">\ell</annotation></semantics></math>; <code>zinbreg()</code> checks this at every iteration and issues a warning if it ever happens.</p>
+<p><strong>Standard errors.</strong> EM does not produce standard errors. We compute the observed information matrix as the negative Hessian of our own observed-data log-likelihood with respect to <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mi>β</mi><mo>,</mo><mi>γ</mi><mo>,</mo><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mi>θ</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(\beta, \gamma, \log\theta)</annotation></semantics></math> at the MLE, using <code>numDeriv::hessian()</code> (numerical differentiation, not optimisation), and invert it. As <code>zeroinfl()</code> does, we report <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mover><mi>θ</mi><mo accent="true">̂</mo></mover></mrow><annotation encoding="application/x-tex">\log\hat\theta</annotation></semantics></math> with its standard error, and also <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi>θ</mi><mo accent="true">̂</mo></mover><annotation encoding="application/x-tex">\hat\theta</annotation></semantics></math>.</p>
+</section>
+<section id="algorithms-and-convergence-criteria" class="level2" data-number="2.3">
+<h2 data-number="2.3"><span class="header-section-number">2.3</span> Algorithms and Convergence Criteria</h2>
+<p><strong>NB (<code>nbreg()</code>).</strong> <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>β</mi><annotation encoding="application/x-tex">\beta</annotation></semantics></math> starts from one Poisson-type weighted least-squares step: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mrow><mi mathvariant="normal">max</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>,</mo><mn>0.5</mn><mo stretchy="false" form="postfix">)</mo><mo>−</mo><msub><mi>o</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">\log\max(y_i, 0.5) - o_i</annotation></semantics></math> is regressed on <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math> with weights <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">max</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>,</mo><mn>0.5</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\max(y_i, 0.5)</annotation></semantics></math>, which is a Poisson IRLS step started from <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>μ</mi><mi>i</mi></msub><mo>=</mo><msub><mi>y</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">\mu_i = y_i</annotation></semantics></math>. <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>θ</mi><annotation encoding="application/x-tex">\theta</annotation></semantics></math> starts from the moment estimator <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>θ</mi><mo accent="true">̂</mo></mover><mn>0</mn></msub><mo>=</mo><msup><mover><mi>y</mi><mo accent="true">‾</mo></mover><mn>2</mn></msup><mi>/</mi><mo stretchy="false" form="prefix">(</mo><msup><mi>s</mi><mn>2</mn></msup><mo>−</mo><mover><mi>y</mi><mo accent="true">‾</mo></mover><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\hat\theta_0 = \bar y^2 / (s^2 - \bar y)</annotation></semantics></math> (set to 1 if <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>s</mi><mn>2</mn></msup><mo>≤</mo><mover><mi>y</mi><mo accent="true">‾</mo></mover></mrow><annotation encoding="application/x-tex">s^2 \le \bar y</annotation></semantics></math>, and at least 0.1). The outer loop alternates (a) IRLS for <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>β</mi><annotation encoding="application/x-tex">\beta</annotation></semantics></math>, iterated until <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mrow><mi mathvariant="normal">max</mi><mo>⁡</mo></mrow><mi>j</mi></msub><mo stretchy="false" form="prefix">|</mo><mi mathvariant="normal">Δ</mi><msub><mi>β</mi><mi>j</mi></msub><mo stretchy="false" form="prefix">|</mo><mo>&lt;</mo><msup><mn>10</mn><mrow><mi>−</mi><mn>10</mn></mrow></msup></mrow><annotation encoding="application/x-tex">\max_j|\Delta\beta_j| &lt; 10^{-10}</annotation></semantics></math>, and (b) Newton–Raphson for <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mi>θ</mi></mrow><annotation encoding="application/x-tex">\log\theta</annotation></semantics></math>. It stops when the log-likelihood changes by less than <code>epsilon</code> (default <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>10</mn><mrow><mi>−</mi><mn>8</mn></mrow></msup><annotation encoding="application/x-tex">10^{-8}</annotation></semantics></math>), or after <code>maxit</code> (default 200) outer iterations.</p>
+<p><strong>ZINB (<code>zinbreg()</code>).</strong> <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mi>β</mi><mo>,</mo><mi>θ</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(\beta, \theta)</annotation></semantics></math> start from an <code>nbreg()</code> fit of the count model. <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>γ</mi><annotation encoding="application/x-tex">\gamma</annotation></semantics></math> starts with its intercept at the logit of the observed proportion of zeros and its other coefficients at zero. Each EM iteration runs one E-step and both M-steps, and the algorithm stops when <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ℓ</mi><annotation encoding="application/x-tex">\ell</annotation></semantics></math> changes by less than <code>epsilon</code> (default <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>10</mn><mrow><mi>−</mi><mn>8</mn></mrow></msup><annotation encoding="application/x-tex">10^{-8}</annotation></semantics></math>), or after <code>maxit</code> (default 300) iterations. The benchmarks below use the tighter <code>epsilon = 1e-10</code>.</p>
+</section>
+</section>
+<section id="the-r-package" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> The R Package</h1>
+<section id="design-and-main-functions" class="level2" data-number="3.1">
+<h2 data-number="3.1"><span class="header-section-number">3.1</span> Design and Main Functions</h2>
+<p>The <strong>nbzinbAmoah</strong> package exports four user-facing functions:</p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>nbreg(formula, data, offset, control, weights)</code></td>
+<td>NB regression via IRLS + Newton–Raphson for <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>θ</mi><annotation encoding="application/x-tex">\theta</annotation></semantics></math></td>
+</tr>
+<tr class="even">
+<td><code>zinbreg(formula, data, offset, control, weights)</code></td>
+<td>ZINB via EM with IRLS M-steps</td>
+</tr>
+<tr class="odd">
+<td><code>nbreg_control(maxit, theta_maxit, epsilon, trace)</code></td>
+<td>Tolerances and iteration limits for <code>nbreg</code></td>
+</tr>
+<tr class="even">
+<td><code>zinbreg_control(maxit, irls_maxit, theta_maxit, epsilon, trace)</code></td>
+<td>Tolerances and iteration limits for <code>zinbreg</code></td>
+</tr>
+</tbody>
+</table>
+<p>Both fitting functions return S3 objects (classes <code>&quot;nbreg&quot;</code> and <code>&quot;zinbreg&quot;</code>) containing the coefficients, variance–covariance matrix, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi>θ</mi><mo accent="true">̂</mo></mover><annotation encoding="application/x-tex">\hat\theta</annotation></semantics></math> and its standard error, log-likelihood, number of iterations, a convergence flag, fitted values and the matched call. Methods are provided for <code>print</code>, <code>summary</code> (a coefficient table of estimates, SEs, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>z</mi><annotation encoding="application/x-tex">z</annotation></semantics></math> values and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>-values, printed by a <code>print.summary</code> method), <code>coef</code>, <code>vcov</code>, <code>logLik</code> (with a <code>df</code> attribute, so <code>AIC()</code> and <code>BIC()</code> work), <code>fitted</code>, <code>residuals</code> (<code>type = &quot;response&quot;</code> or <code>&quot;pearson&quot;</code>), <code>nobs</code>, and <code>predict</code> (with <code>newdata</code>). For <code>zinbreg</code>, <code>coef()</code> and <code>vcov()</code> take <code>model = &quot;count&quot;</code>, <code>&quot;zero&quot;</code> or <code>&quot;full&quot;</code>, and <code>predict()</code> supports <code>type = &quot;response&quot;</code> (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>π</mi><mo stretchy="false" form="postfix">)</mo><mi>μ</mi></mrow><annotation encoding="application/x-tex">(1-\pi)\mu</annotation></semantics></math>), <code>&quot;count&quot;</code> (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>μ</mi><annotation encoding="application/x-tex">\mu</annotation></semantics></math>) and <code>&quot;zero&quot;</code> (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>π</mi><annotation encoding="application/x-tex">\pi</annotation></semantics></math>).</p>
+<p>The <code>zinbreg</code> formula uses the two-part syntax <code>y ~ x1 + x2 | z1 + z2</code> from the <strong>Formula</strong> package: count-model covariates before the bar and zero-model covariates after it. Without <code>|</code>, the same covariates are used in both parts, as in <code>zeroinfl()</code>.</p>
+</section>
+<section id="installation" class="level2" data-number="3.2">
+<h2 data-number="3.2"><span class="header-section-number">3.2</span> Installation</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;AbigailAmoah/nbzinbAmoah&quot;</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nbzinbAmoah)</span></code></pre></div>
+</section>
+<section id="usage-example" class="level2" data-number="3.3">
+<h2 data-number="3.3"><span class="header-section-number">3.3</span> Usage Example</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit NB and ZINB on bioChemists (for illustration)</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>fit_nb_ex <span class="ot">&lt;-</span> <span class="fu">nbreg</span>(art <span class="sc">~</span> fem <span class="sc">+</span> mar <span class="sc">+</span> kid5 <span class="sc">+</span> phd <span class="sc">+</span> ment,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">data =</span> bioChemists)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>fit_zinb_ex <span class="ot">&lt;-</span> <span class="fu">zinbreg</span>(art <span class="sc">~</span> fem <span class="sc">+</span> mar <span class="sc">+</span> kid5 <span class="sc">+</span> phd <span class="sc">+</span> ment <span class="sc">|</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>                             fem <span class="sc">+</span> mar <span class="sc">+</span> kid5 <span class="sc">+</span> phd <span class="sc">+</span> ment,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>                        <span class="at">data =</span> bioChemists)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Quick look</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(fit_nb_ex)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>(Intercept)    femWomen  marMarried        kid5         phd        ment 
+ 0.25614402 -0.21641842  0.15048945 -0.17641524  0.01527116  0.02908234 </code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="benchmarking" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Benchmarking</h1>
+<p>We benchmark <strong>nbzinbAmoah</strong> against <code>MASS::glm.nb()</code> (NB) and <code>pscl::zeroinfl()</code> (ZINB) on two datasets: <code>pscl::bioChemists</code> (n = 915) and <code>AER::NMES1988</code> (n = 4406). All functions are run with tight tolerances (<code>epsilon = 1e-10</code> for ours and <code>glm.nb</code>, <code>reltol = 1e-12</code> for <code>zeroinfl</code>). For each fit we compare estimates and standard errors side by side. For NB the dispersion row is <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>θ</mi><annotation encoding="application/x-tex">\theta</annotation></semantics></math>, and its standard error for our fit uses the delta method, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">SE</mtext><mo stretchy="false" form="prefix">(</mo><mover><mi>θ</mi><mo accent="true">̂</mo></mover><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mover><mi>θ</mi><mo accent="true">̂</mo></mover><mspace width="0.167em"></mspace><mtext mathvariant="normal">SE</mtext><mo stretchy="false" form="prefix">(</mo><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mover><mi>θ</mi><mo accent="true">̂</mo></mover><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\text{SE}(\hat\theta) = \hat\theta\,\text{SE}(\log\hat\theta)</annotation></semantics></math>. For ZINB the dispersion row is <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mi>θ</mi></mrow><annotation encoding="application/x-tex">\log\theta</annotation></semantics></math>, as reported by <code>zeroinfl</code>.</p>
+<section id="biochemists-nb" class="level2" data-number="4.1">
+<h2 data-number="4.1"><span class="header-section-number">4.1</span> bioChemists: NB</h2>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top">
+<caption>NB: nbreg vs glm.nb (bioChemists)</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;">Term</th>
+<th style="text-align: right;">Ours</th>
+<th style="text-align: right;">Reference</th>
+<th style="text-align: right;">|diff|</th>
+<th style="text-align: right;">SE ours</th>
+<th style="text-align: right;">SE ref</th>
+<th style="text-align: right;">|diff| SE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">(Intercept)</td>
+<td style="text-align: right;">0.256144</td>
+<td style="text-align: right;">0.256144</td>
+<td style="text-align: right;">3.72e-10</td>
+<td style="text-align: right;">0.137348</td>
+<td style="text-align: right;">0.137348</td>
+<td style="text-align: right;">4.75e-12</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">femWomen</td>
+<td style="text-align: right;">-0.216418</td>
+<td style="text-align: right;">-0.216418</td>
+<td style="text-align: right;">6.23e-11</td>
+<td style="text-align: right;">0.072636</td>
+<td style="text-align: right;">0.072636</td>
+<td style="text-align: right;">1.55e-12</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">marMarried</td>
+<td style="text-align: right;">0.150489</td>
+<td style="text-align: right;">0.150489</td>
+<td style="text-align: right;">1.19e-11</td>
+<td style="text-align: right;">0.082097</td>
+<td style="text-align: right;">0.082097</td>
+<td style="text-align: right;">2.09e-12</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">kid5</td>
+<td style="text-align: right;">-0.176415</td>
+<td style="text-align: right;">-0.176415</td>
+<td style="text-align: right;">4.15e-11</td>
+<td style="text-align: right;">0.052813</td>
+<td style="text-align: right;">0.052813</td>
+<td style="text-align: right;">9.04e-13</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">phd</td>
+<td style="text-align: right;">0.015271</td>
+<td style="text-align: right;">0.015271</td>
+<td style="text-align: right;">3.75e-11</td>
+<td style="text-align: right;">0.035873</td>
+<td style="text-align: right;">0.035873</td>
+<td style="text-align: right;">8.66e-13</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">ment</td>
+<td style="text-align: right;">0.029082</td>
+<td style="text-align: right;">0.029082</td>
+<td style="text-align: right;">2.11e-11</td>
+<td style="text-align: right;">0.003214</td>
+<td style="text-align: right;">0.003214</td>
+<td style="text-align: right;">1.82e-13</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">theta</td>
+<td style="text-align: right;">2.264388</td>
+<td style="text-align: right;">2.264388</td>
+<td style="text-align: right;">8.95e-11</td>
+<td style="text-align: right;">0.271176</td>
+<td style="text-align: right;">0.271175</td>
+<td style="text-align: right;">1.14e-06</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Our nbreg() gives exactly the same results as the built-in glm.nb() function. The differences are far smaller than the required tolerance.</p>
+</section>
+<section id="biochemists-zinb" class="level2" data-number="4.2">
+<h2 data-number="4.2"><span class="header-section-number">4.2</span> bioChemists: ZINB</h2>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top">
+<caption>ZINB: zinbreg vs zeroinfl (bioChemists)</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;">Part</th>
+<th style="text-align: right;">Term</th>
+<th style="text-align: right;">Ours</th>
+<th style="text-align: right;">Reference</th>
+<th style="text-align: right;">|diff|</th>
+<th style="text-align: right;">SE ours</th>
+<th style="text-align: right;">SE ref</th>
+<th style="text-align: right;">|diff| SE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">count</td>
+<td style="text-align: right;">(Intercept)</td>
+<td style="text-align: right;">0.416747</td>
+<td style="text-align: right;">0.416747</td>
+<td style="text-align: right;">2.75e-07</td>
+<td style="text-align: right;">0.143596</td>
+<td style="text-align: right;">0.143597</td>
+<td style="text-align: right;">5.19e-07</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">count</td>
+<td style="text-align: right;">femWomen</td>
+<td style="text-align: right;">-0.195507</td>
+<td style="text-align: right;">-0.195507</td>
+<td style="text-align: right;">2.39e-07</td>
+<td style="text-align: right;">0.075593</td>
+<td style="text-align: right;">0.075593</td>
+<td style="text-align: right;">1.40e-08</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">count</td>
+<td style="text-align: right;">marMarried</td>
+<td style="text-align: right;">0.097583</td>
+<td style="text-align: right;">0.097583</td>
+<td style="text-align: right;">1.20e-07</td>
+<td style="text-align: right;">0.084452</td>
+<td style="text-align: right;">0.084452</td>
+<td style="text-align: right;">7.79e-09</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">count</td>
+<td style="text-align: right;">kid5</td>
+<td style="text-align: right;">-0.151732</td>
+<td style="text-align: right;">-0.151732</td>
+<td style="text-align: right;">1.74e-07</td>
+<td style="text-align: right;">0.054206</td>
+<td style="text-align: right;">0.054206</td>
+<td style="text-align: right;">7.40e-09</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">count</td>
+<td style="text-align: right;">phd</td>
+<td style="text-align: right;">-0.000700</td>
+<td style="text-align: right;">-0.000700</td>
+<td style="text-align: right;">5.28e-08</td>
+<td style="text-align: right;">0.036270</td>
+<td style="text-align: right;">0.036270</td>
+<td style="text-align: right;">1.54e-07</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">count</td>
+<td style="text-align: right;">ment</td>
+<td style="text-align: right;">0.024786</td>
+<td style="text-align: right;">0.024786</td>
+<td style="text-align: right;">3.10e-08</td>
+<td style="text-align: right;">0.003492</td>
+<td style="text-align: right;">0.003493</td>
+<td style="text-align: right;">2.46e-07</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">count</td>
+<td style="text-align: right;">Log(theta)</td>
+<td style="text-align: right;">0.976358</td>
+<td style="text-align: right;">0.976357</td>
+<td style="text-align: right;">1.25e-06</td>
+<td style="text-align: right;">0.135468</td>
+<td style="text-align: right;">0.135469</td>
+<td style="text-align: right;">1.45e-06</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">zero</td>
+<td style="text-align: right;">(Intercept)</td>
+<td style="text-align: right;">-0.191702</td>
+<td style="text-align: right;">-0.191688</td>
+<td style="text-align: right;">1.35e-05</td>
+<td style="text-align: right;">1.322811</td>
+<td style="text-align: right;">1.322819</td>
+<td style="text-align: right;">7.88e-06</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">zero</td>
+<td style="text-align: right;">femWomen</td>
+<td style="text-align: right;">0.635934</td>
+<td style="text-align: right;">0.635933</td>
+<td style="text-align: right;">8.06e-07</td>
+<td style="text-align: right;">0.848911</td>
+<td style="text-align: right;">0.848918</td>
+<td style="text-align: right;">6.74e-06</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">zero</td>
+<td style="text-align: right;">marMarried</td>
+<td style="text-align: right;">-1.499453</td>
+<td style="text-align: right;">-1.499468</td>
+<td style="text-align: right;">1.51e-05</td>
+<td style="text-align: right;">0.938662</td>
+<td style="text-align: right;">0.938671</td>
+<td style="text-align: right;">8.76e-06</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">zero</td>
+<td style="text-align: right;">kid5</td>
+<td style="text-align: right;">0.628425</td>
+<td style="text-align: right;">0.628427</td>
+<td style="text-align: right;">1.97e-06</td>
+<td style="text-align: right;">0.442780</td>
+<td style="text-align: right;">0.442783</td>
+<td style="text-align: right;">2.52e-06</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">zero</td>
+<td style="text-align: right;">phd</td>
+<td style="text-align: right;">-0.037712</td>
+<td style="text-align: right;">-0.037715</td>
+<td style="text-align: right;">2.82e-06</td>
+<td style="text-align: right;">0.308006</td>
+<td style="text-align: right;">0.308008</td>
+<td style="text-align: right;">1.80e-06</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">zero</td>
+<td style="text-align: right;">ment</td>
+<td style="text-align: right;">-0.882286</td>
+<td style="text-align: right;">-0.882293</td>
+<td style="text-align: right;">7.65e-06</td>
+<td style="text-align: right;">0.316224</td>
+<td style="text-align: right;">0.316228</td>
+<td style="text-align: right;">4.08e-06</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Our zinbreg() also matches zeroinfl() very closely. Both functions find the same answer, confirming our EM algorithm works correctly.</p>
+</section>
+<section id="nmes1988-nb" class="level2" data-number="4.3">
+<h2 data-number="4.3"><span class="header-section-number">4.3</span> NMES1988: NB</h2>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top">
+<caption>NB: nbreg vs glm.nb (NMES1988)</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;">Term</th>
+<th style="text-align: right;">Ours</th>
+<th style="text-align: right;">Reference</th>
+<th style="text-align: right;">|diff|</th>
+<th style="text-align: right;">SE ours</th>
+<th style="text-align: right;">SE ref</th>
+<th style="text-align: right;">|diff| SE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">(Intercept)</td>
+<td style="text-align: right;">0.929257</td>
+<td style="text-align: right;">0.929257</td>
+<td style="text-align: right;">5.97e-11</td>
+<td style="text-align: right;">0.054591</td>
+<td style="text-align: right;">0.054591</td>
+<td style="text-align: right;">3.93e-12</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">hospital</td>
+<td style="text-align: right;">0.217772</td>
+<td style="text-align: right;">0.217772</td>
+<td style="text-align: right;">7.37e-11</td>
+<td style="text-align: right;">0.020176</td>
+<td style="text-align: right;">0.020176</td>
+<td style="text-align: right;">5.73e-13</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">healthpoor</td>
+<td style="text-align: right;">0.305013</td>
+<td style="text-align: right;">0.305013</td>
+<td style="text-align: right;">3.96e-11</td>
+<td style="text-align: right;">0.048511</td>
+<td style="text-align: right;">0.048511</td>
+<td style="text-align: right;">2.41e-12</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">healthexcellent</td>
+<td style="text-align: right;">-0.341807</td>
+<td style="text-align: right;">-0.341807</td>
+<td style="text-align: right;">2.12e-11</td>
+<td style="text-align: right;">0.060924</td>
+<td style="text-align: right;">0.060924</td>
+<td style="text-align: right;">4.28e-12</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">chronic</td>
+<td style="text-align: right;">0.174916</td>
+<td style="text-align: right;">0.174916</td>
+<td style="text-align: right;">1.79e-11</td>
+<td style="text-align: right;">0.012092</td>
+<td style="text-align: right;">0.012092</td>
+<td style="text-align: right;">7.43e-13</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">gendermale</td>
+<td style="text-align: right;">-0.126488</td>
+<td style="text-align: right;">-0.126488</td>
+<td style="text-align: right;">9.37e-12</td>
+<td style="text-align: right;">0.031216</td>
+<td style="text-align: right;">0.031216</td>
+<td style="text-align: right;">2.19e-12</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">school</td>
+<td style="text-align: right;">0.026815</td>
+<td style="text-align: right;">0.026815</td>
+<td style="text-align: right;">7.52e-13</td>
+<td style="text-align: right;">0.004394</td>
+<td style="text-align: right;">0.004394</td>
+<td style="text-align: right;">3.05e-13</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">insuranceyes</td>
+<td style="text-align: right;">0.224402</td>
+<td style="text-align: right;">0.224402</td>
+<td style="text-align: right;">1.88e-12</td>
+<td style="text-align: right;">0.039464</td>
+<td style="text-align: right;">0.039464</td>
+<td style="text-align: right;">2.66e-12</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">theta</td>
+<td style="text-align: right;">1.206604</td>
+<td style="text-align: right;">1.206604</td>
+<td style="text-align: right;">1.36e-10</td>
+<td style="text-align: right;">0.033555</td>
+<td style="text-align: right;">0.033555</td>
+<td style="text-align: right;">4.20e-07</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Our nbreg() matches glm.nb() on the larger NMES1988 dataset too. The maximum coefficient difference is 7.37e-11 and the log-likelihood difference is just 1.82e-12 which are similar results.</p>
+</section>
+<section id="nmes1988-zinb" class="level2" data-number="4.4">
+<h2 data-number="4.4"><span class="header-section-number">4.4</span> NMES1988: ZINB</h2>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top">
+<caption>ZINB: zinbreg vs zeroinfl (NMES1988)</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;">Part</th>
+<th style="text-align: right;">Term</th>
+<th style="text-align: right;">Ours</th>
+<th style="text-align: right;">Reference</th>
+<th style="text-align: right;">|diff|</th>
+<th style="text-align: right;">SE ours</th>
+<th style="text-align: right;">SE ref</th>
+<th style="text-align: right;">|diff| SE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">count</td>
+<td style="text-align: right;">(Intercept)</td>
+<td style="text-align: right;">1.193713</td>
+<td style="text-align: right;">1.193713</td>
+<td style="text-align: right;">4.92e-07</td>
+<td style="text-align: right;">0.056661</td>
+<td style="text-align: right;">0.056661</td>
+<td style="text-align: right;">1.66e-07</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">count</td>
+<td style="text-align: right;">hospital</td>
+<td style="text-align: right;">0.201477</td>
+<td style="text-align: right;">0.201477</td>
+<td style="text-align: right;">2.66e-08</td>
+<td style="text-align: right;">0.020360</td>
+<td style="text-align: right;">0.020360</td>
+<td style="text-align: right;">8.90e-09</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">count</td>
+<td style="text-align: right;">healthpoor</td>
+<td style="text-align: right;">0.285133</td>
+<td style="text-align: right;">0.285133</td>
+<td style="text-align: right;">8.92e-08</td>
+<td style="text-align: right;">0.045093</td>
+<td style="text-align: right;">0.045093</td>
+<td style="text-align: right;">1.69e-09</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">count</td>
+<td style="text-align: right;">healthexcellent</td>
+<td style="text-align: right;">-0.319336</td>
+<td style="text-align: right;">-0.319336</td>
+<td style="text-align: right;">2.05e-07</td>
+<td style="text-align: right;">0.060405</td>
+<td style="text-align: right;">0.060405</td>
+<td style="text-align: right;">7.93e-09</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">count</td>
+<td style="text-align: right;">chronic</td>
+<td style="text-align: right;">0.129000</td>
+<td style="text-align: right;">0.129000</td>
+<td style="text-align: right;">1.45e-07</td>
+<td style="text-align: right;">0.011931</td>
+<td style="text-align: right;">0.011931</td>
+<td style="text-align: right;">6.32e-09</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">count</td>
+<td style="text-align: right;">gendermale</td>
+<td style="text-align: right;">-0.080277</td>
+<td style="text-align: right;">-0.080277</td>
+<td style="text-align: right;">1.34e-07</td>
+<td style="text-align: right;">0.031024</td>
+<td style="text-align: right;">0.031024</td>
+<td style="text-align: right;">7.41e-09</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">count</td>
+<td style="text-align: right;">school</td>
+<td style="text-align: right;">0.021423</td>
+<td style="text-align: right;">0.021423</td>
+<td style="text-align: right;">2.45e-08</td>
+<td style="text-align: right;">0.004358</td>
+<td style="text-align: right;">0.004358</td>
+<td style="text-align: right;">2.00e-08</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">count</td>
+<td style="text-align: right;">insuranceyes</td>
+<td style="text-align: right;">0.125864</td>
+<td style="text-align: right;">0.125864</td>
+<td style="text-align: right;">2.09e-07</td>
+<td style="text-align: right;">0.041588</td>
+<td style="text-align: right;">0.041588</td>
+<td style="text-align: right;">1.15e-08</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">count</td>
+<td style="text-align: right;">Log(theta)</td>
+<td style="text-align: right;">0.394144</td>
+<td style="text-align: right;">0.394143</td>
+<td style="text-align: right;">9.09e-07</td>
+<td style="text-align: right;">0.035035</td>
+<td style="text-align: right;">0.035035</td>
+<td style="text-align: right;">9.51e-08</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">zero</td>
+<td style="text-align: right;">(Intercept)</td>
+<td style="text-align: right;">-0.046884</td>
+<td style="text-align: right;">-0.046879</td>
+<td style="text-align: right;">5.44e-06</td>
+<td style="text-align: right;">0.268561</td>
+<td style="text-align: right;">0.268558</td>
+<td style="text-align: right;">2.93e-06</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">zero</td>
+<td style="text-align: right;">hospital</td>
+<td style="text-align: right;">-0.800488</td>
+<td style="text-align: right;">-0.800483</td>
+<td style="text-align: right;">4.23e-06</td>
+<td style="text-align: right;">0.420817</td>
+<td style="text-align: right;">0.420816</td>
+<td style="text-align: right;">1.30e-06</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">zero</td>
+<td style="text-align: right;">chronic</td>
+<td style="text-align: right;">-1.247934</td>
+<td style="text-align: right;">-1.247938</td>
+<td style="text-align: right;">4.76e-06</td>
+<td style="text-align: right;">0.178316</td>
+<td style="text-align: right;">0.178316</td>
+<td style="text-align: right;">4.11e-07</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">zero</td>
+<td style="text-align: right;">gendermale</td>
+<td style="text-align: right;">0.647678</td>
+<td style="text-align: right;">0.647678</td>
+<td style="text-align: right;">3.97e-07</td>
+<td style="text-align: right;">0.200114</td>
+<td style="text-align: right;">0.200115</td>
+<td style="text-align: right;">7.08e-07</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">zero</td>
+<td style="text-align: right;">school</td>
+<td style="text-align: right;">-0.083770</td>
+<td style="text-align: right;">-0.083771</td>
+<td style="text-align: right;">6.35e-07</td>
+<td style="text-align: right;">0.026254</td>
+<td style="text-align: right;">0.026253</td>
+<td style="text-align: right;">7.17e-07</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">zero</td>
+<td style="text-align: right;">insuranceyes</td>
+<td style="text-align: right;">-1.175611</td>
+<td style="text-align: right;">-1.175615</td>
+<td style="text-align: right;">4.17e-06</td>
+<td style="text-align: right;">0.220119</td>
+<td style="text-align: right;">0.220121</td>
+<td style="text-align: right;">1.98e-06</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Our zinbreg() also agrees closely with zeroinfl() on NMES1988. The maximum coefficient difference is 4.92e-7, whivh is within our tolerance of <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>10</mn><mrow><mi>−</mi><mn>3</mn></mrow></msup><annotation encoding="application/x-tex">10^{-3}</annotation></semantics></math></p>
+</section>
+<section id="agreement-summary" class="level2" data-number="4.5">
+<h2 data-number="4.5"><span class="header-section-number">4.5</span> Agreement Summary</h2>
+<p><a href="#tbl-agree" class="quarto-xref">Table 1</a> gives the maximum absolute difference for each quantity in Table 4 of the project description, and whether all four are within the required tolerance (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>10</mn><mrow><mi>−</mi><mn>5</mn></mrow></msup><annotation encoding="application/x-tex">10^{-5}</annotation></semantics></math> for NB coefficients and SEs, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>10</mn><mrow><mi>−</mi><mn>4</mn></mrow></msup><annotation encoding="application/x-tex">10^{-4}</annotation></semantics></math> for <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>θ</mi><annotation encoding="application/x-tex">\theta</annotation></semantics></math> and the NB log-likelihood, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>10</mn><mrow><mi>−</mi><mn>3</mn></mrow></msup><annotation encoding="application/x-tex">10^{-3}</annotation></semantics></math> for everything in ZINB).</p>
+<div class="cell">
+<div id="tbl-agree" class="cell quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-float-tbl">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-agree-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table 1: Maximum absolute differences between nbzinbAmoah and the reference implementations
+</figcaption>
+<div aria-describedby="tbl-agree-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="cell caption-top">
+<colgroup>
+<col style="width: 14%">
+<col style="width: 7%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 23%">
+<col style="width: 11%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Dataset</th>
+<th style="text-align: left;">Model</th>
+<th style="text-align: left;">Coef</th>
+<th style="text-align: left;">SE</th>
+<th style="text-align: left;">theta / log(theta)</th>
+<th style="text-align: left;">logLik</th>
+<th style="text-align: left;">Within tolerance</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">bioChemists</td>
+<td style="text-align: left;">NB</td>
+<td style="text-align: left;">3.72e-10</td>
+<td style="text-align: left;">4.75e-12</td>
+<td style="text-align: left;">8.95e-11</td>
+<td style="text-align: left;">2.27e-13</td>
+<td style="text-align: left;">yes</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">bioChemists</td>
+<td style="text-align: left;">ZINB</td>
+<td style="text-align: left;">1.51e-05</td>
+<td style="text-align: left;">8.76e-06</td>
+<td style="text-align: left;">1.25e-06</td>
+<td style="text-align: left;">4.37e-10</td>
+<td style="text-align: left;">yes</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">NMES1988</td>
+<td style="text-align: left;">NB</td>
+<td style="text-align: left;">7.37e-11</td>
+<td style="text-align: left;">4.28e-12</td>
+<td style="text-align: left;">1.36e-10</td>
+<td style="text-align: left;">1.82e-12</td>
+<td style="text-align: left;">yes</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">NMES1988</td>
+<td style="text-align: left;">ZINB</td>
+<td style="text-align: left;">5.44e-06</td>
+<td style="text-align: left;">2.93e-06</td>
+<td style="text-align: left;">9.09e-07</td>
+<td style="text-align: left;">9.97e-10</td>
+<td style="text-align: left;">yes</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<p>All differences are within the required tolerances. This confirms that our package gives the same results as trusted reference functions across all four datasets and models.</p>
+</section>
+<section id="computation-time" class="level2" data-number="4.6">
+<h2 data-number="4.6"><span class="header-section-number">4.6</span> Computation Time</h2>
+<p>Each fit is timed with <code>system.time()</code>, taking the median elapsed time of 5 repetitions. Our code is not expected to be faster than the reference.</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top">
+<caption>Median elapsed time over 5 repetitions</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Dataset</th>
+<th style="text-align: left;">Model</th>
+<th style="text-align: right;">Ours (s)</th>
+<th style="text-align: right;">Reference (s)</th>
+<th style="text-align: right;">Ratio</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">bioChemists</td>
+<td style="text-align: left;">NB</td>
+<td style="text-align: right;">0.02</td>
+<td style="text-align: right;">0.10</td>
+<td style="text-align: right;">0.2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">bioChemists</td>
+<td style="text-align: left;">ZINB</td>
+<td style="text-align: right;">1.47</td>
+<td style="text-align: right;">0.32</td>
+<td style="text-align: right;">4.6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">NMES1988</td>
+<td style="text-align: left;">NB</td>
+<td style="text-align: right;">0.10</td>
+<td style="text-align: right;">0.34</td>
+<td style="text-align: right;">0.3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">NMES1988</td>
+<td style="text-align: left;">ZINB</td>
+<td style="text-align: right;">5.73</td>
+<td style="text-align: right;">1.44</td>
+<td style="text-align: right;">4.0</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Our NB function is actually faster than the built-in one (0.02s vs 0.09s on bioChemists). Our ZINB function is slower, it takes more steps to reach the answer. This is expected because the EM algorithm works differently from the optimizer used by zeroinfl().</p>
+</section>
+</section>
+<section id="simulation-study" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Simulation Study</h1>
+<p>We assess the finite-sample performance of <code>zinbreg()</code> by simulating <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mo>=</mo><mn>100</mn></mrow><annotation encoding="application/x-tex">R = 100</annotation></semantics></math> datasets of size <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mn>500</mn></mrow><annotation encoding="application/x-tex">n = 500</annotation></semantics></math> from a ZINB model with known parameters.</p>
+<p><strong>True parameters:</strong> <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>β</mi><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>0.5</mn><mo>,</mo><mn>0.3</mn><mo>,</mo><mi>−</mi><mn>0.4</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\beta = (0.5, 0.3, -0.4)</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>γ</mi><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mi>−</mi><mn>1.0</mn><mo>,</mo><mn>0.8</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\gamma = (-1.0, 0.8)</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>θ</mi><mo>=</mo><mn>2.0</mn></mrow><annotation encoding="application/x-tex">\theta = 2.0</annotation></semantics></math>.</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top">
+<caption>Simulation results (R=100 replicates, n=500). Converged: 99/100.</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: right;">Truth</th>
+<th style="text-align: right;">Bias</th>
+<th style="text-align: right;">MC_SD</th>
+<th style="text-align: right;">Mean_SE</th>
+<th style="text-align: right;">Coverage_95</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">beta_0</td>
+<td style="text-align: right;">0.5000</td>
+<td style="text-align: right;">-0.0004</td>
+<td style="text-align: right;">0.0912</td>
+<td style="text-align: right;">0.0878</td>
+<td style="text-align: right;">0.93</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">beta_1</td>
+<td style="text-align: right;">0.3000</td>
+<td style="text-align: right;">0.0044</td>
+<td style="text-align: right;">0.0596</td>
+<td style="text-align: right;">0.0613</td>
+<td style="text-align: right;">0.95</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">beta_2</td>
+<td style="text-align: right;">-0.4000</td>
+<td style="text-align: right;">-0.0085</td>
+<td style="text-align: right;">0.0667</td>
+<td style="text-align: right;">0.0618</td>
+<td style="text-align: right;">0.93</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">gamma_0</td>
+<td style="text-align: right;">-1.0000</td>
+<td style="text-align: right;">-0.0217</td>
+<td style="text-align: right;">0.3582</td>
+<td style="text-align: right;">0.3449</td>
+<td style="text-align: right;">0.95</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">gamma_1</td>
+<td style="text-align: right;">0.8000</td>
+<td style="text-align: right;">0.0621</td>
+<td style="text-align: right;">0.2620</td>
+<td style="text-align: right;">0.2428</td>
+<td style="text-align: right;">0.93</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">log(theta)</td>
+<td style="text-align: right;">0.6931</td>
+<td style="text-align: right;">0.0598</td>
+<td style="text-align: right;">0.3196</td>
+<td style="text-align: right;">0.3094</td>
+<td style="text-align: right;">0.95</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>The largest bias across all parameters is 0.062, for gamma_1, which is small relative to the true value of 0.8. The 95% confidence intervals captured the true value between 93% and 95% of the time across all parameters, close to the expected 95%. This tells us that zinbreg() gives reliable estimates and accurate standard errors.</p>
+</section>
+<section id="data-analysis-nmes1988" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Data Analysis: NMES1988</h1>
+<p>We analyse the <code>NMES1988</code> dataset from the <strong>AER</strong> package <span class="citation" data-cites="kleiber2008">(<a href="#ref-kleiber2008" role="doc-biblioref">Kleiber and Zeileis 2008</a>)</span>, which records physician office visits for 4,406 individuals aged 66 and over from the US National Medical Expenditure Survey (1987–88) <span class="citation" data-cites="deb1997">(<a href="#ref-deb1997" role="doc-biblioref">Deb and Trivedi 1997</a>)</span>.</p>
+<section id="descriptive-summary" class="level2" data-number="6.1">
+<h2 data-number="6.1"><span class="header-section-number">6.1</span> Descriptive Summary</h2>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top">
+<caption>Descriptive statistics for physician office visits (NMES1988)</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;">n</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: right;">variance</th>
+<th style="text-align: right;">prop_zero</th>
+<th style="text-align: right;">poisson_pred_zero</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">4406</td>
+<td style="text-align: right;">5.7744</td>
+<td style="text-align: right;">45.6871</td>
+<td style="text-align: right;">0.155</td>
+<td style="text-align: right;">0.0031</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img role="img" src="data:image/png;base64,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" width="672"></p>
+<figcaption>Observed visit counts (bars) vs Poisson expected (points). The Poisson severely under-predicts zeros and over-predicts moderate counts.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>The variance (45.69) far exceeds the mean (5.77), indicating overdispersion. The observed proportion of zeros (0.155) exceeds the Poisson prediction (0.003), suggesting excess zeros.</p>
+</section>
+<section id="model-fitting" class="level2" data-number="6.2">
+<h2 data-number="6.2"><span class="header-section-number">6.2</span> Model Fitting</h2>
+<p>We fit a Poisson GLM with <code>glm()</code> (for reference only), and NB and ZINB models with <strong>nbzinbAmoah</strong>. As specified in the project description, the count model uses <code>hospital</code>, <code>health</code>, <code>chronic</code>, <code>gender</code>, <code>school</code> and <code>insurance</code>, and the zero model uses <code>hospital</code>, <code>chronic</code>, <code>gender</code>, <code>school</code> and <code>insurance</code>.</p>
+</section>
+<section id="model-comparison" class="level2" data-number="6.3">
+<h2 data-number="6.3"><span class="header-section-number">6.3</span> Model Comparison</h2>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top">
+<caption>Model comparison for NMES1988 (observed zeros = 683)</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Model</th>
+<th style="text-align: right;">df</th>
+<th style="text-align: right;">logLik</th>
+<th style="text-align: right;">AIC</th>
+<th style="text-align: right;">BIC</th>
+<th style="text-align: right;">ExpZeros</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Poisson</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">-17971.6</td>
+<td style="text-align: right;">35959.2</td>
+<td style="text-align: right;">36010.4</td>
+<td style="text-align: right;">46.7</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">NB</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">-12170.6</td>
+<td style="text-align: right;">24359.1</td>
+<td style="text-align: right;">24416.6</td>
+<td style="text-align: right;">608.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ZINB</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">-12090.7</td>
+<td style="text-align: right;">24211.4</td>
+<td style="text-align: right;">24307.3</td>
+<td style="text-align: right;">708.9</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="interpretation" class="level2" data-number="6.4">
+<h2 data-number="6.4"><span class="header-section-number">6.4</span> Interpretation</h2>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top">
+<caption>NB model: incidence rate ratios (IRR) with 95% Wald CIs. Values above 1 indicate higher visit rates.</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Covariate</th>
+<th style="text-align: right;">IRR</th>
+<th style="text-align: left;">95% CI</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">hospital</td>
+<td style="text-align: right;">1.243</td>
+<td style="text-align: left;">(1.195, 1.293)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">healthpoor</td>
+<td style="text-align: right;">1.357</td>
+<td style="text-align: left;">(1.234, 1.492)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">healthexcellent</td>
+<td style="text-align: right;">0.710</td>
+<td style="text-align: left;">(0.631, 0.801)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">chronic</td>
+<td style="text-align: right;">1.191</td>
+<td style="text-align: left;">(1.163, 1.220)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">gendermale</td>
+<td style="text-align: right;">0.881</td>
+<td style="text-align: left;">(0.829, 0.937)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">school</td>
+<td style="text-align: right;">1.027</td>
+<td style="text-align: left;">(1.018, 1.036)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">insuranceyes</td>
+<td style="text-align: right;">1.252</td>
+<td style="text-align: left;">(1.158, 1.352)</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top">
+<caption>ZINB zero part: odds ratios for being a structural zero</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Covariate</th>
+<th style="text-align: right;">OR</th>
+<th style="text-align: left;">95% CI</th>
+<th style="text-align: left;">p-value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">hospital</td>
+<td style="text-align: right;">0.449</td>
+<td style="text-align: left;">(0.197, 1.025)</td>
+<td style="text-align: left;">0.0571</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">chronic</td>
+<td style="text-align: right;">0.287</td>
+<td style="text-align: left;">(0.202, 0.407)</td>
+<td style="text-align: left;">&lt;1e-04</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">gendermale</td>
+<td style="text-align: right;">1.911</td>
+<td style="text-align: left;">(1.291, 2.829)</td>
+<td style="text-align: left;">0.0012</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">school</td>
+<td style="text-align: right;">0.920</td>
+<td style="text-align: left;">(0.874, 0.968)</td>
+<td style="text-align: left;">0.0014</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">insuranceyes</td>
+<td style="text-align: right;">0.309</td>
+<td style="text-align: left;">(0.200, 0.475)</td>
+<td style="text-align: left;">&lt;1e-04</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><strong>Dispersion.</strong> The NB model estimates <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi>θ</mi><mo accent="true">̂</mo></mover><annotation encoding="application/x-tex">\hat\theta</annotation></semantics></math> = 1.207 (SE of <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mover><mi>θ</mi><mo accent="true">̂</mo></mover></mrow><annotation encoding="application/x-tex">\log\hat\theta</annotation></semantics></math> = 0.028). At the mean visit count of 5.77, the NB variance <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>μ</mi><mo>+</mo><msup><mi>μ</mi><mn>2</mn></msup><mi>/</mi><mi>θ</mi></mrow><annotation encoding="application/x-tex">\mu + \mu^2/\theta</annotation></semantics></math> is therefore about 33.4, compared with 5.77 under the Poisson model. The ZINB count part has <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mover><mi>θ</mi><mo accent="true">̂</mo></mover></mrow><annotation encoding="application/x-tex">\log\hat\theta</annotation></semantics></math> = 0.394 (SE 0.035), <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi>θ</mi><mo accent="true">̂</mo></mover><annotation encoding="application/x-tex">\hat\theta</annotation></semantics></math> = 1.483.</p>
+<p>For the NB model each additional hospital stay is associated with 24% more physician visits. People in poor health make 36% more visits than people in average health. Those in excellent health make 29% fewer visits. Each chronic condition is associated with 19% more visits. Men make 12% fewer visits than women. Having insurance is associated with 25% more visits.</p>
+<p>The ZINB count part shows the same pattern as the NB model; hospital stays, poor health, chronic conditions, and insurance all increase visits, while excellent health and being male reduce visits. The effects are slightly smaller because some zeros are now handled by the zero part.</p>
+<p>The zero part shows who never visits a doctor. People with chronic conditions are less likely to be non-visitors (OR = 0.287) because they have no choice but to seek care. Men are almost twice as likely as women to never visit a doctor (OR = 1.911). People with insurance are much less likely to be non-visitors (OR = 0.309), suggesting cost keeps some people away. More education also slightly reduces the chance of never visiting (OR = 0.920). Hospital stays were not significant with p = 0.057.</p>
+</section>
+<section id="model-choice" class="level2" data-number="6.5">
+<h2 data-number="6.5"><span class="header-section-number">6.5</span> Model Choice</h2>
+<p>The Poisson model fits very poorly. Its log-likelihood is 5801 lower than the NB model’s, and it predicts only 47 zeros against 683 observed. Allowing overdispersion fixes most of the problem, but the NB model still under-predicts zeros (608 expected). The ZINB model improves the log-likelihood by a further 79.8 with 6 extra parameters, predicts 709 zeros, and has the lowest AIC <strong>and</strong> the lowest BIC.</p>
+<p>We therefore prefer the <strong>ZINB model</strong> for NMES1988. For the bioChemists data in Appendix A of the project description, BIC favoured the simpler NB model; here, the evidence for excess zeros is strong enough to survive BIC’s larger penalty. The zero part also adds a useful interpretation: it identifies a group of structural non-users of physician care, who are more likely to be male, uninsured, less educated and to have fewer chronic conditions.</p>
+</section>
+</section>
+<section id="discussion" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> Discussion</h1>
+<p>This project implemented NB and ZINB regression from scratch, using only IRLS and Newton–Raphson (NB) and an EM algorithm with IRLS M-steps (ZINB). No general-purpose optimizer was used in the fitting code.</p>
+<p>The benchmarking results confirm that our implementation reproduces <code>MASS::glm.nb()</code> to within 3.72e-10 and <code>pscl::zeroinfl()</code> to within 1.51e-05 for coefficients, with log-likelihood differences of at most 9.97e-10. These are well within the required tolerances (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>10</mn><mrow><mi>−</mi><mn>5</mn></mrow></msup><annotation encoding="application/x-tex">10^{-5}</annotation></semantics></math> for NB and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>10</mn><mrow><mi>−</mi><mn>3</mn></mrow></msup><annotation encoding="application/x-tex">10^{-3}</annotation></semantics></math> for ZINB coefficients).</p>
+<p>The simulation study (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>R</mi><annotation encoding="application/x-tex">R</annotation></semantics></math> = 100, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math> = 500) shows that <code>zinbreg()</code> reliably recovers known ZINB parameters with negligible bias and well-calibrated 95% Wald intervals (empirical coverage 0.93–0.95).</p>
+<p><strong>Limitations.</strong> First, the NB standard errors for <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>β</mi><annotation encoding="application/x-tex">\beta</annotation></semantics></math> treat <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>θ</mi><annotation encoding="application/x-tex">\theta</annotation></semantics></math> as known, as <code>glm.nb()</code> does, so they ignore the uncertainty in <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi>θ</mi><mo accent="true">̂</mo></mover><annotation encoding="application/x-tex">\hat\theta</annotation></semantics></math>. Second, the ZINB standard errors use a numerical Hessian, which is slower and can be less accurate than an analytic one. Third, EM converges linearly, so <code>zinbreg()</code> needs many iterations and is several times slower than <code>zeroinfl()</code> (see the timing table). Fourth, offsets are supported in the count model only, not in the zero model. Finally, in the NMES1988 analysis the zero-model covariates follow the project description, and the choice between NB and ZINB relies on information criteria rather than a formal test, because the usual likelihood-ratio test is non-standard when the null value <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>π</mi><mi>i</mi></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\pi_i = 0</annotation></semantics></math> lies on the boundary of the parameter space.</p>
+<p><strong>Possible extensions</strong> include an analytic Hessian for the ZINB standard errors, an offset in the zero model, acceleration of the EM algorithm (for example, switching to Newton–Raphson near convergence), and a formal score test for zero inflation.</p>
+</section>
+<section id="ai-use-statement" class="level1" data-number="8">
+<h1 data-number="8"><span class="header-section-number">8</span> AI-Use Statement</h1>
+<p>I used Claude.ai together with claude code and vscode to write the main functions, nbreg() and zinbreg(), including the IRLS, Newton-Raphson, and EM algorithms. It also helped me set up the GitHub repository, prepare the benchmark scripts, run the simulation study, create the pkgdown website, and draft the report. I followed the process by providing instructions based on the equations and requirements in the project description.</p>
+<p>I read the project description to understand the statistical methods. I also checked the benchmark comparisons results agreed with MASS::glm.nb() and pscl::zeroinfl() within the required tolerances. I reviewed the report, checked the results, and made changes to the wording where necessary.</p>
+<p>I noticed a function that Claude used inside the package that caused an error during testing. I read the error message, and asked Claude to use a different approach, “solve(crossprod())”. That actually worked.</p>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="references" class="level1" data-number="9">
+<h1 data-number="9"><span class="header-section-number">9</span> References</h1>
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-deb1997" class="csl-entry" role="listitem">
+Deb, Partha, and Pravin K. Trivedi. 1997. <span>“Demand for Medical Care by the Elderly: A Finite Mixture Approach.”</span> <em>Journal of Applied Econometrics</em> 12 (3): 313–36.
+</div>
+<div id="ref-dempster1977" class="csl-entry" role="listitem">
+Dempster, A. P., N. M. Laird, and D. B. Rubin. 1977. <span>“Maximum Likelihood from Incomplete Data via the <span>EM</span> Algorithm.”</span> <em>Journal of the Royal Statistical Society, Series B</em> 39 (1): 1–38.
+</div>
+<div id="ref-kleiber2008" class="csl-entry" role="listitem">
+Kleiber, Christian, and Achim Zeileis. 2008. <em>Applied Econometrics with <span>R</span></em>. Springer.
+</div>
+<div id="ref-lambert1992" class="csl-entry" role="listitem">
+Lambert, Diane. 1992. <span>“Zero-Inflated <span>P</span>oisson Regression, with an Application to Defects in Manufacturing.”</span> <em>Technometrics</em> 34 (1): 1–14.
+</div>
+<div id="ref-mccullagh1989" class="csl-entry" role="listitem">
+McCullagh, P., and J. A. Nelder. 1989. <em>Generalized Linear Models</em>. 2nd ed. Chapman &amp; Hall.
+</div>
+<div id="ref-venables2002" class="csl-entry" role="listitem">
+Venables, W. N., and B. D. Ripley. 2002. <em>Modern Applied Statistics with <span>S</span></em>. 4th ed. Springer.
+</div>
+<div id="ref-zeileis2008" class="csl-entry" role="listitem">
+Zeileis, Achim, Christian Kleiber, and Simon Jackman. 2008. <span>“Regression Models for Count Data in <span>R</span>.”</span> <em>Journal of Statistical Software</em> 27 (8): 1–25.
+</div>
+</div>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="appendix-a-full-model-output-for-biochemists" class="level1" data-number="10">
+<h1 data-number="10"><span class="header-section-number">10</span> Appendix A: Full Model Output for bioChemists</h1>
+<p>The <code>pscl::bioChemists</code> dataset records the number of articles published by 915 PhD biochemists in their last three years.</p>
+<section id="nb-model" class="level2" data-number="10.1">
+<h2 data-number="10.1"><span class="header-section-number">10.1</span> NB Model</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Negative Binomial Regression
+Call: nbreg(formula = f_bio_nb, data = bioChemists, control = ctrl_nb)
+
+Coefficients:
+             Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept)  0.256144   0.137348   1.865 0.062191 .  
+femWomen    -0.216418   0.072636  -2.979 0.002887 ** 
+marMarried   0.150489   0.082097   1.833 0.066791 .  
+kid5        -0.176415   0.052813  -3.340 0.000837 ***
+phd          0.015271   0.035873   0.426 0.670326    
+ment         0.029082   0.003214   9.048  &lt; 2e-16 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Theta: 2.2644  (SE of log-theta: 0.1198)
+Log-likelihood: -1560.9583 on 908 Df
+n = 915  Converged: TRUE  Iterations: 4</code></pre>
+</div>
+</div>
+</section>
+<section id="zinb-model" class="level2" data-number="10.2">
+<h2 data-number="10.2"><span class="header-section-number">10.2</span> ZINB Model</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Zero-Inflated Negative Binomial Regression
+Call: zinbreg(formula = f_bio_zinb, data = bioChemists, control = ctrl_zinb)
+
+
+Count model coefficients (NB with log link):
+              Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept)  0.4167468  0.1435960   2.902  0.00371 ** 
+femWomen    -0.1955066  0.0755925  -2.586  0.00970 ** 
+marMarried   0.0975827  0.0844519   1.155  0.24789    
+kid5        -0.1517323  0.0542061  -2.799  0.00512 ** 
+phd         -0.0007001  0.0362695  -0.019  0.98460    
+ment         0.0247862  0.0034924   7.097 1.27e-12 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Log(theta): 0.9764  (SE: 0.1355)  =&gt;  theta = 2.6548
+
+Zero-inflation model coefficients (binomial with logit link):
+            Estimate Std. Error z value Pr(&gt;|z|)   
+(Intercept) -0.19170    1.32281  -0.145  0.88477   
+femWomen     0.63593    0.84891   0.749  0.45379   
+marMarried  -1.49945    0.93866  -1.597  0.11017   
+kid5         0.62843    0.44278   1.419  0.15582   
+phd         -0.03771    0.30801  -0.122  0.90255   
+ment        -0.88229    0.31622  -2.790  0.00527 **
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Log-likelihood: -1549.9909 on 902 Df
+n = 915  Converged: TRUE  Iterations: 135</code></pre>
+</div>
+</div>
+</section>
+</section>
+</main>
+
+<div class="includes-after">
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+      window.quartoDecorateExternalLinks = function (root) {
+     var links = (root || window.document).querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+          if (!link.classList.contains('no-external-icon')) {
+          }
+        }
+      }
+      };
+      window.quartoDecorateExternalLinks(window.document);
+    // Esc closes the popup (WCAG 1.4.13) and focus leaving both trigger and
+    // popup closes it (WCAG 2.4.11); tippy handles neither for interactive popups.
+    const hideOnEscAndFocusOut = {
+      name: 'hideOnEscAndFocusOut',
+      defaultValue: true,
+      fn(instance) {
+        const dismiss = () => {
+          // A show scheduled by the trigger delay would otherwise reopen it
+          instance.clearDelayTimeouts();
+          instance.hide();
+        };
+        const onKeyDown = (event) => {
+          if (event.key !== 'Escape') {
+            return;
+          }
+          // Keep Esc from also reaching page handlers (e.g. reveal.js overview),
+          // except an open reveal.js slide menu, which Esc should close too.
+          // The menu handles keys only when its keyboard option is on.
+          const menuHandlesEsc = window.Reveal?.getPlugin?.('menu')?.isOpen() &&
+            window.Reveal.getConfig().menu?.keyboard !== false;
+          if (!menuHandlesEsc) {
+            event.stopPropagation();
+          }
+          if (instance.popper.contains(window.document.activeElement)) {
+            // Disabled while refocusing so the focus trigger does not reopen it
+            instance.disable();
+            instance.reference.focus();
+            instance.enable();
+          }
+          dismiss();
+        };
+        const onFocusOut = (event) => {
+          const target = event.relatedTarget;
+          if (target && !instance.reference.contains(target) &&
+              !instance.popper.contains(target)) {
+            dismiss();
+          }
+        };
+        // On the trigger too: a click trigger (code-annotations: select) has no
+        // blur handling. Attached for the instance's lifetime so leaving the
+        // trigger also cancels a show still pending on the trigger delay.
+        instance.reference.addEventListener('focusout', onFocusOut);
+        return {
+          onShow() {
+            window.document.addEventListener('keydown', onKeyDown, true);
+            instance.popper.addEventListener('focusout', onFocusOut);
+          },
+          onHide() {
+            window.document.removeEventListener('keydown', onKeyDown, true);
+            instance.popper.removeEventListener('focusout', onFocusOut);
+          },
+          onDestroy() {
+            instance.reference.removeEventListener('focusout', onFocusOut);
+          },
+        };
+      },
+    };
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'light-border',
+        placement: 'bottom-start',
+        plugins: [hideOnEscAndFocusOut],
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div>
+
+
+
+</body></html>

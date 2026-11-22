@@ -42,6 +42,13 @@ least squares (IRLS) for the coefficient vector beta, alternated with
 Newton-Raphson updates for the dispersion parameter theta.
 No general-purpose optimizer is used.
 }
+\section{Warnings}{
+
+A warning is issued if the algorithm reaches \code{maxit} iterations
+without converging, or if \eqn{\hat	heta} exceeds \eqn{10^4}, which
+means the data show essentially no overdispersion (the Poisson limit).
+}
+
 \examples{
 if (requireNamespace("pscl", quietly = TRUE)) {
   data("bioChemists", package = "pscl")

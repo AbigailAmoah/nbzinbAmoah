@@ -1,4 +1,8 @@
-^CLAUDE\.md$
+^\.claude$
 ^\.github$
 ^docs$
 ^inst/benchmark$
+^_pkgdown\.yml$
+^report$
+^project-docs$
+^vignettes$

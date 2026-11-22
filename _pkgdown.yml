@@ -1,0 +1,35 @@
+url: https://AbigailAmoah.github.io/nbzinbAmoah/
+
+template:
+  bootstrap: 5
+
+home:
+  title: "nbzinbAmoah — NB and ZINB Regression"
+  description: "Negative Binomial and Zero-Inflated Negative Binomial regression via IRLS and EM"
+
+navbar:
+  structure:
+    left: [intro, reference, articles]
+    right: [github]
+  components:
+    github:
+      icon: fab fa-github
+      href: https://github.com/AbigailAmoah/nbzinbAmoah
+
+reference:
+  - title: "Fitting functions"
+    desc: "Main model-fitting functions"
+    contents:
+      - nbreg
+      - zinbreg
+  - title: "Control parameters"
+    desc: "Fine-tune the fitting algorithms"
+    contents:
+      - nbreg_control
+      - zinbreg_control
+
+articles:
+  - title: "Report"
+    navbar: "Report"
+    contents:
+      - articles/report

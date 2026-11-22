@@ -101,3 +101,18 @@ test_that("nbreg S3 methods work", {
   pred <- predict(fit, type = "response")
   expect_equal(length(pred), nrow(bioChemists))
 })
+
+## ---- Section 4.3 warnings ----
+test_that("nbreg warns when maxit is reached without converging", {
+  expect_warning(
+    nbreg(art ~ fem + ment, data = bioChemists,
+          control = nbreg_control(maxit = 1)),
+    "did not converge")
+})
+
+test_that("nbreg warns when theta is very large (Poisson limit)", {
+  set.seed(1)
+  x <- rnorm(500)
+  d <- data.frame(x = x, y = rpois(500, exp(1 + 0.3 * x)))  # no overdispersion
+  expect_warning(nbreg(y ~ x, data = d), "Poisson")
+})

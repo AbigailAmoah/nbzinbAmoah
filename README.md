@@ -1,7 +1,7 @@
 # nbzinbAmoah
 
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/amoaha/nbzinbAmoah/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/amoaha/nbzinbAmoah/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/AbigailAmoah/nbzinbAmoah/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/AbigailAmoah/nbzinbAmoah/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 An R package for **Negative Binomial (NB)** and **Zero-Inflated Negative Binomial (ZINB)** regression, built from scratch using iteratively reweighted least squares (IRLS) and an EM algorithm — without any general-purpose optimizer.
@@ -10,7 +10,7 @@ An R package for **Negative Binomial (NB)** and **Zero-Inflated Negative Binomia
 
 ```r
 # Install from GitHub
-devtools::install_github("amoaha/nbzinbAmoah")
+devtools::install_github("AbigailAmoah/nbzinbAmoah")
 ```
 
 ## Usage
@@ -50,4 +50,4 @@ The file `CLAUDE.md` lists the project constraints. The prohibited functions (`o
 
 ## Pkgdown website
 
-[https://amoaha.github.io/nbzinbAmoah/](https://amoaha.github.io/nbzinbAmoah/)
+[https://AbigailAmoah.github.io/nbzinbAmoah/](https://AbigailAmoah.github.io/nbzinbAmoah/)

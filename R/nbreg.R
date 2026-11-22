@@ -41,6 +41,10 @@ nbreg_control <- function(maxit = 200, theta_maxit = 50,
 #'   \item{call}{The matched call.}
 #'   \item{terms}{The terms object.}
 #'   \item{model}{The model frame.}
+#' @section Warnings:
+#' A warning is issued if the algorithm reaches \code{maxit} iterations
+#' without converging, or if \eqn{\hat	heta} exceeds \eqn{10^4}, which
+#' means the data show essentially no overdispersion (the Poisson limit).
 #' @examples
 #' if (requireNamespace("pscl", quietly = TRUE)) {
 #'   data("bioChemists", package = "pscl")
@@ -180,6 +184,11 @@ nbreg <- function(formula, data, offset = NULL, control = nbreg_control(),
     loglik_old <- loglik
   }
 
+  ## Section 4.3 warnings: maxit reached without converging, and theta so
+  ## large that the model is at the Poisson limit (helpers in utils.R)
+  warn_not_converged(converged, control$maxit, "nbreg (IRLS + Newton-Raphson)")
+  warn_large_theta(theta)
+
   ## ---- 4. Standard errors for beta ----
   ## Var(beta_hat) = (X' W_hat X)^{-1}  (treating theta as known, as glm.nb does)
   w_final <- a * theta * mu / (theta + mu)
@@ -204,7 +213,8 @@ nbreg <- function(formula, data, offset = NULL, control = nbreg_control(),
   ## ---- 5. Assemble output ----
   structure(
     list(
-      coefficients  = beta,
+      ## as.numeric(solve(...)) in the IRLS loop drops names; restore them
+      coefficients  = stats::setNames(beta, colnames(X)),
       theta         = theta_final,
       SE_theta      = SE_theta,
       loglik        = loglik,

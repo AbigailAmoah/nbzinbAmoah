@@ -47,6 +47,11 @@ zinbreg_control <- function(maxit = 300, irls_maxit = 50, theta_maxit = 50,
 #'   \item{iter}{Number of EM iterations.}
 #'   \item{converged}{Logical.}
 #'   \item{call}{The matched call.}
+#' @section Warnings:
+#' A warning is issued if the EM algorithm reaches \code{maxit} iterations
+#' without converging, if the observed-data log-likelihood ever decreases,
+#' or if \eqn{\hat	heta} exceeds \eqn{10^4}, which means the count part
+#' shows essentially no overdispersion (the Poisson limit).
 #' @examples
 #' if (requireNamespace("pscl", quietly = TRUE)) {
 #'   data("bioChemists", package = "pscl")
@@ -89,10 +94,12 @@ zinbreg <- function(formula, data, offset = NULL,
 
   ## ---- 2. Starting values: NB fit for (beta, theta), logistic for gamma ----
   ## Fit NB to get starting beta and theta
+  ## suppressWarnings: this fit only supplies starting values, and its
+  ## convergence is checked through nb_start$converged below
   nb_start <- tryCatch(
-    nbreg(as.formula(paste("y ~", paste(colnames(X)[-1], collapse = "+"))),
+    suppressWarnings(nbreg(as.formula(paste("y ~", paste(colnames(X)[-1], collapse = "+"))),
           data = as.data.frame(cbind(y = y, X[, -1, drop = FALSE])),
-          control = nbreg_control(maxit = 50, trace = FALSE)),
+          control = nbreg_control(maxit = 50, trace = FALSE))),
     error = function(e) NULL
   )
   if (!is.null(nb_start) && nb_start$converged) {
@@ -228,6 +235,11 @@ zinbreg <- function(formula, data, offset = NULL,
     loglik_old <- loglik_new
   }
 
+  ## Section 4.3 warnings: maxit reached without converging, and theta so
+  ## large that the count model is at the Poisson limit (helpers in utils.R)
+  warn_not_converged(converged, control$maxit, "zinbreg (EM algorithm)")
+  warn_large_theta(theta)
+
   ## ---- 4. Standard errors via numerical Hessian of observed log-likelihood ----
   ## Parameter vector: (beta, gamma, log_theta)
   ## We use numDeriv::hessian if available, else a simple finite-difference
@@ -275,7 +287,9 @@ zinbreg <- function(formula, data, offset = NULL,
 
   structure(
     list(
-      coefficients  = list(count = beta, zero = gamma),
+      ## IRLS updates in the M-steps drop names; restore them
+      coefficients  = list(count = stats::setNames(beta,  colnames(X)),
+                           zero  = stats::setNames(gamma, colnames(Z))),
       theta         = theta,
       SE_logtheta   = SE_logtheta,
       loglik        = loglik_old,
@@ -377,7 +391,10 @@ print.summary.zinbreg <- function(x, digits = 4, signif.stars = TRUE, ...) {
 coef.zinbreg <- function(object, model = c("full", "count", "zero"), ...) {
   model <- match.arg(model)
   if (model == "full") {
-    c(object$coefficients$count, object$coefficients$zero)
+    ## Prefix names as zeroinfl() does, so the two intercepts are distinguishable
+    cf <- object$coefficients
+    c(stats::setNames(cf$count, paste0("count_", names(cf$count))),
+      stats::setNames(cf$zero,  paste0("zero_",  names(cf$zero))))
   } else {
     object$coefficients[[model]]
   }

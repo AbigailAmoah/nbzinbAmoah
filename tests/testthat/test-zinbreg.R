@@ -68,10 +68,21 @@ test_that("zinbreg log-likelihood agrees with zeroinfl on bioChemists", {
 ## ---- EM monotonicity: log-likelihood must never decrease ----
 test_that("zinbreg EM log-likelihood is non-decreasing", {
   ctrl <- zinbreg_control(maxit = 50, epsilon = 1e-12, trace = FALSE)
-  fit1 <- zinbreg(art ~ fem + ment | fem + ment,
-                  data = bioChemists, control = ctrl)
-  fit2 <- zinbreg(art ~ ment | ment,
-                  data = bioChemists, control = ctrl)
+  ## These fits may stop at maxit (expected here), so collect the warnings
+  ## and fail only if EM reports a log-likelihood decrease
+  fit_collect <- function(f) {
+    msgs <- character()
+    fit <- withCallingHandlers(
+      zinbreg(f, data = bioChemists, control = ctrl),
+      warning = function(w) {
+        msgs <<- c(msgs, conditionMessage(w))
+        invokeRestart("muffleWarning")
+      })
+    expect_false(any(grepl("decreased", msgs)))
+    fit
+  }
+  fit1 <- fit_collect(art ~ fem + ment | fem + ment)
+  fit2 <- fit_collect(art ~ ment | ment)
   expect_true(fit1$converged || fit1$iter == 50)
   expect_true(fit2$converged || fit2$iter == 50)
   expect_gt(as.numeric(logLik(fit1)), -Inf)
@@ -114,4 +125,12 @@ test_that("zinbreg S3 methods work", {
   expect_equal(length(predict(fit, type = "response")), nrow(bioChemists))
   expect_equal(length(predict(fit, type = "count")),    nrow(bioChemists))
   expect_equal(length(predict(fit, type = "zero")),     nrow(bioChemists))
+})
+
+## ---- Section 4.3 warnings ----
+test_that("zinbreg warns when maxit is reached without converging", {
+  expect_warning(
+    zinbreg(art ~ fem + ment | ment, data = bioChemists,
+            control = zinbreg_control(maxit = 2)),
+    "did not converge")
 })
